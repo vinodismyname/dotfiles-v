@@ -138,7 +138,7 @@ esac
 heading "Step 3: Updating Git Submodules"
 
 run_with_spinner "Cloning submodules..." -- \
-  bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive" &>/dev/null
+  bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
 
@@ -154,7 +154,7 @@ if [ "$IS_MAC" = true ]; then
   primary_msg "Installing macOS Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
-    grun_with_spinner "brew bundle (mac)" -- \
+    run_with_spinner "brew bundle (mac)" -- \
       bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "macOS brew bundle complete"
   else
