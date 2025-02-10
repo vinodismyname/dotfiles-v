@@ -1,6 +1,6 @@
 skip_global_compinit=1
 
-export ZSH_CONFIG_FOLDER=${HOME}/_zsh
+export ZSH_CONFIG_FOLDER="${HOME}/_zsh"
 
 #histfile
 export HISTFILE=~/.history

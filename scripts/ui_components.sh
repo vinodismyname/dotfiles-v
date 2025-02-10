@@ -23,7 +23,7 @@ heading() {
 }
 
 subheading() {
-
+    echo
     gum style --foreground "$PRIMARY" "  $INFO_SYMBOL $1"
     gum style --foreground "$DIM" "  $(printf '─%.0s' $(seq 1 40))"
 }

@@ -44,7 +44,7 @@ gum style \
   --padding "1" \
   --bold \
   --border-foreground "$PRIMARY" \
-  "Dotfiles-V Setup"
+  "Hello $USER. Time for configure some dotfiles!"
 
 gum style --bold "This script will:"
 echo "1) Install or update basic dependencies."
@@ -150,7 +150,7 @@ divider
 heading "Step 4: Installing Platform-Specific Packages"
 
 if [ "$IS_MAC" = true ]; then
-  info_msg "Installing macOS Homebrew Packages"
+  subheading "Installing macOS Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (mac)"  \
@@ -160,7 +160,7 @@ if [ "$IS_MAC" = true ]; then
     warn_msg "No mac.Brewfile found."
   fi
 elif [ "$IS_LINUX" = true ]; then
-  info_msg "Installing Linux Homebrew Packages"
+  subheading "Installing Linux Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (linux)"  \
@@ -178,8 +178,7 @@ fi
 # GPU / NVIDIA detection
 # ─────────────────────────────────────────────────────────────────────────────
 
-divider
-
+subheading "GPU Setup"
 if [ "$IS_LINUX" = true ] && sudo lshw 2>/dev/null | grep -i nvidia &>/dev/null; then
   HAS_NVIDIA=true
 fi
@@ -196,12 +195,12 @@ else
   gum style --foreground "$DIM" "No NVIDIA GPU detected. Skipping NVIDIA setup."
 fi
 
-divider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Docker Group
 # ─────────────────────────────────────────────────────────────────────────────
 
+subheading "Docker Membership"
 if [ "$IS_LINUX" = true ] && confirm_action "Configure Docker group membership?"; then
   if [ "$DRY_RUN" = false ]; then
     sudo groupadd docker 2>/dev/null || true
@@ -218,6 +217,7 @@ divider
 # AWS CLI + Amazon environment
 # ─────────────────────────────────────────────────────────────────────────────
 
+subheading "Amazon Dev Tools"
 if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then
@@ -240,7 +240,6 @@ if confirm_action "Install AWS CLI (and attempt Amazon environment setup if appl
 
   # Amazon environment
   if command -v mwinit &>/dev/null; then
-    info_msg "Amazon environment detected."
     if [ "$DRY_RUN" = false ]; then
       bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
@@ -249,12 +248,13 @@ if confirm_action "Install AWS CLI (and attempt Amazon environment setup if appl
   fi
 fi
 
-divider
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Rust
 # ─────────────────────────────────────────────────────────────────────────────
 
+subheading "Rust Setup"
 if confirm_action "Install Rust via rustup?"; then
   if ! command -v rustc &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
@@ -276,7 +276,6 @@ divider
 # ─────────────────────────────────────────────────────────────────────────────
 
 heading "Step 5: Linking Dotfiles with Dotbot"
-
 DOTBOT_BIN="$DOTFILES_DIR/dotbot/bin/dotbot"
 if [ ! -x "$DOTBOT_BIN" ]; then
   DOTBOT_BIN="python3 $DOTFILES_DIR/dotbot/dotbot.py"
@@ -292,7 +291,6 @@ else
   run_with_spinner "Running Dotbot..." "${CMD[*]}"
 fi
 
-divider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Final Message
