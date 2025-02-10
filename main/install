@@ -137,8 +137,7 @@ esac
 
 heading "Step 3: Updating Git Submodules"
 
-run_with_spinner "Cloning submodules..." -- \
-  bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive"
+run_with_spinner "Cloning submodules..." -- bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
 

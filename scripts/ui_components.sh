@@ -15,9 +15,8 @@ divider() {
 
 ### A heading function for major steps
 heading() {
-gum style --foreground "$DIM" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 gum style --bold --foreground "$HEADER"  "==> $1"
-gum style --foreground "$DIM" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+gum style --foreground "$DIM""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
 ### Primary Messages
@@ -46,7 +45,24 @@ gum style --foreground "$DIM" "$1"
 }
 
 run_with_spinner() {
-    local title=$1
-    local cmd=$2
-    gum spin --spinner dot --title "${title}..." -- eval "${cmd}"
+    local title=""
+    local cmd=""
+    local found_separator=false
+    
+    # Parse arguments to handle -- separator
+    for arg in "$@"; do
+        if [[ "$arg" == "--" ]]; then
+            found_separator=true
+            continue
+        fi
+        
+        if [[ "$found_separator" == true ]]; then
+            cmd="${cmd:+$cmd }$arg"
+        else
+            title="${title:+$title }$arg"
+        fi
+    done
+    
+    # Execute the command with gum spin
+    gum spin --spinner dot --title "${title}..." -- $cmd
 }
