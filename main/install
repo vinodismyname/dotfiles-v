@@ -68,8 +68,8 @@ heading "Step 1: Checking Homebrew"
 if ! command -v brew &>/dev/null; then
   run_with_spinner "Installing Homebrew..." "sleep 1"
   echo
-  gum style --foreground "$DIM" "Homebrew not found. Installing now..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  dim_msg "Homebrew not found. Installing now..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &>/dev/null
 
   # Add Homebrew to PATH for this session
   if [[ -f /opt/homebrew/bin/brew ]]; then
