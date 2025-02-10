@@ -192,7 +192,7 @@ if [ "$HAS_NVIDIA" = true ]; then
     fi
   fi
 else
-  gum style --foreground "$DIM" "No NVIDIA GPU detected. Skipping NVIDIA setup."
+  dim_msg "No NVIDIA GPU detected. Skipping NVIDIA setup."
 fi
 
 
@@ -211,7 +211,6 @@ if [ "$IS_LINUX" = true ] && confirm_action "Configure Docker group membership?"
   fi
 fi
 
-divider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # AWS CLI + Amazon environment
@@ -223,18 +222,12 @@ if confirm_action "Install AWS CLI (and attempt Amazon environment setup if appl
     if [ "$DRY_RUN" = false ]; then
       run_with_spinner "Installing AWS cli" "brew install awscli"
       if [ $? -eq 0 ]; then
-      success_msg "AWS cli Installed"
+      success_msg "AWS cli installed"
+      else 
+      dim_msg "AWS cli already installed"
       fi
     else
       warn_msg "[DRY_RUN] brew install awscli"
-    fi
-  elif [ "$IS_LINUX" = true ]; then
-    if command -v yum &>/dev/null; then
-      if [ "$DRY_RUN" = false ]; then
-        run_with_spinner "Installing AWS cli" "sudo yum install -y awscli"
-      else
-        warn_msg "[DRY_RUN] sudo yum install -y awscli"
-      fi
     fi
   fi
 
@@ -265,7 +258,7 @@ if confirm_action "Install Rust via rustup?"; then
       warn_msg "[DRY_RUN] Would install Rust via rustup."
     fi
   else
-    gum style --foreground "$DIM" "Rust is already installed."
+    dim_msg "Rust is already installed."
   fi
 fi
 
@@ -284,13 +277,20 @@ fi
 CMD=("$DOTBOT_BIN" -d "$DOTFILES_DIR" -c "$DOTFILES_DIR/main/install.conf.yaml")
 [ "$VERBOSE" = true ] && CMD+=(--verbose)
 
-if [ "$DRY_RUN" = true ]; then
-  CMD+=(--no-color --only link)
-  warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
-else
-  run_with_spinner "Running Dotbot..." "${CMD[*]}"
-fi
 
+if confirm_action "Link Dotfiles?"; then
+  if [ "$DRY_RUN" = true ]; then
+    CMD+=(--no-color --only link)
+    warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
+  else
+    run_with_spinner "Running Dotbot..." "${CMD[*]}"
+    if [ $? -eq 0 ]; then
+    success_msg "DotFiles Linked."
+    else
+    error_msg "Some error in linking DotFiles"
+    fi
+  fi
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Final Message
