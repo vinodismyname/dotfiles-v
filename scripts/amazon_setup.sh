@@ -6,8 +6,6 @@ set -euo pipefail
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 WORKPLACE_DIR="/workplace/${USER}"
 
-subheading "Running Amazon environment setup..."
-
 # ─────────────────────────────────────────────────────────────────────────────
 # Toolbox
 # ─────────────────────────────────────────────────────────────────────────────

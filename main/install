@@ -216,7 +216,7 @@ fi
 # AWS CLI + Amazon environment
 # ─────────────────────────────────────────────────────────────────────────────
 
-subheading "Amazon Dev Tools"
+subheading "Amzn Work Env Setup"
 if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then

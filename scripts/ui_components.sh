@@ -2,7 +2,7 @@
 
 
 ### Color Palette (ANSI 256 color codes)
-PRIMARY=39      # Bright blue
+PRIMARY=159     # Seafoam
 SUCCESS=82      # Bright green
 WARNING=178     # Light orange
 ERROR=196       # Bright red
