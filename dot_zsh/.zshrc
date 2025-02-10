@@ -2,9 +2,9 @@
 source_if_exists() {
     [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
 }
-source_if_exists "$HOME/.zsh/config/os_detection.zsh"
+source_if_exists "$HOME/_zsh/config/os_detection.zsh"
 
-source_if_exists "$HOME/.zsh/config/pre_zsh.zsh"
+source_if_exists "$HOME/_zsh/config/pre_zsh.zsh"
 ###############################################################################
 # cloud desktop setup envImprovement
 if [ "$IS_LINUX" = true ]; then
@@ -106,7 +106,9 @@ source_if_exists "$HOME/_zsh/fzf_tab_config.zsh"
 # source aliases
 source_if_exists "$HOME/_zsh/config/aliases.zsh"
 # source function to browse and cd into workspace directories
+if [ "$IS_AMZN" = true ] then;
 source_if_exists "$HOME/_zsh/functions/brazil_workspace_switcher.zsh"
+fi
 # source function to select aws profiles with fzf
 source_if_exists "$HOME/_zsh/functions/aws_profile_switcher.zsh"
 
