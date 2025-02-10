@@ -3,52 +3,65 @@
 set -euo pipefail
 export DOTFILES_PATH="$HOME/_dotfiles"
 
-echo "🚀 Booting Up"
-echo "-------------------------------------------------"
-echo
+# Pretty print function
+pp() {
+    local symbol=$1
+    local message=$2
+    printf "\033[1m%s\033[0m %s\n" "$symbol" "$message"
+}
+
+pp "→" "Starting setup..."
 
 handle_midway_auth() {
-    set +e  # Temporarily disable exit on error
+    set +e
     mwinit -o
-    MWINIT_STATUS=$?
+    local status=$?
     set -e
     
-    if [ $MWINIT_STATUS -ne 0 ]; then
-        echo "❌ Midway authentication failed. Please try again."
+    if [ $status -ne 0 ]; then
+        pp "×" "Authentication failed"
         exit 1
     fi
-    echo "✔ Midway Authenticated!"
 }
 
 if command -v mwinit &>/dev/null; then
-    echo "🔒 Checking Midway authentication..."
     AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
+    
     if ! echo "$AUTH_RESPONSE" | grep -q '"authenticated":true'; then
-        echo "❌ Midway authentication expired. Refreshing credentials..."
+        pp "!" "Refreshing credentials..."
         handle_midway_auth
     else
         EXPIRES_AT=$(echo "$AUTH_RESPONSE" | grep -o '"expires_at":[0-9]*' | cut -d':' -f2)
         CURRENT_TIME=$(date +%s)
         TIME_REMAINING=$((EXPIRES_AT - CURRENT_TIME))
+        
         if [ "$TIME_REMAINING" -lt 3600 ]; then
-            echo "⚠️  Midway credentials expiring soon. Refreshing..."
+            pp "!" "Credentials expiring soon, refreshing..."
             handle_midway_auth
-        else
-            echo "✔ Midway Authentication Present!"
         fi
     fi
 fi
 
-echo "-------------------------------------------------"
-echo "👉  Cloning into: '$DOTFILES_PATH'"
+pp "→" "Preparing installation"
 
-git --version || {
-    echo "❌ Git is required but not installed."
+# Check for git
+if ! command -v git &>/dev/null; then
+    pp "×" "Git is required but not installed"
+    exit 1
+fi
+
+# Clone repository
+pp "→" "Cloning dotfiles..."
+git clone --quiet --no-progress --depth 1 https://github.com/vinodismyname/dotfiles-v.git "$DOTFILES_PATH" &>/dev/null || {
+    pp "×" "Failed to clone repository"
     exit 1
 }
 
+# Make scripts executable
+find "$DOTFILES_PATH" -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.zsh" \) -exec chmod +x {} +
 
-git clone --depth 1 https://github.com/vinodismyname/dotfiles-v.git "$DOTFILES_PATH"
+# Run installer
+pp "→" "Running installer..."
+"$DOTFILES_PATH/main/install"
 
-"$DOTFILES_PATH/main/install" "verbose"
-echo "✅ Installation completed successfully!"
+pp "✓" "Setup complete"

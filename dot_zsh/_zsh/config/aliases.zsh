@@ -51,9 +51,9 @@ if [ "$IS_AMZN" = true ]; then
   alias bbra='bbr apollo-pkg'
 
 
-  if ["$IS_LINUX" = true]; then 
+  if [ "$IS_LINUX" = true ]; then 
     alias aws='/apollo/env/AwsCli/bin/aws'
-    if ["$HAS_NVDA" = true]; then 
+    if [ "$HAS_NVDA" = true ]; then 
       alias nvitop="uvx nvitop --colorful"
     fi
   fi

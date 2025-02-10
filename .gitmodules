@@ -2,9 +2,9 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "_zsh/plugins/fzf-tab-source"]
+[submodule "dot_zsh/_zsh/plugins/fzf-tab-source"]
 	path = dot_zsh/_zsh/plugins/fzf-tab-source
 	url = https://github.com/vinodismyname/fzf-tab-source
-[submodule "_zsh/plugins/fzf-tab"]
+[submodule "dot_zsh/_zsh/plugins/fzf-tab"]
 	path = dot_zsh/_zsh/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab

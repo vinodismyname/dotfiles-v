@@ -3,19 +3,22 @@
     link:
       create: true   # create parent directories as needed
       relink: true   # if symlink already exists, remove it and link again
+      force: true
     shell:
       stdin: false
       stdout: true
       stderr: true
 
-- clean:
-  - ~  # Remove any dead symlinks in $HOME (that point into your dotfiles directory)
+- clean: ['~']  # Remove any dead symlinks in $HOME (that point into your dotfiles directory)
 
 - link:
+    ~/.zshrc: dot_zsh/.zshrc
+    ~/.p10k.zsh: dot_zsh/.p10k.zsh
+    ~/.zlogin: dot_zsh/.zlogin
 
-    ~/:
+    ~/_zsh/:
       glob: true
-      path: dot_zsh/**
+      path: dot_zsh/_zsh/**
 
     ~/.config/:
       glob: true
