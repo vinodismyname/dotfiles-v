@@ -45,24 +45,7 @@ gum style --foreground "$DIM" "$1"
 }
 
 run_with_spinner() {
-    local title=""
-    local cmd=""
-    local found_separator=false
-    
-    # Parse arguments to handle -- separator
-    for arg in "$@"; do
-        if [[ "$arg" == "--" ]]; then
-            found_separator=true
-            continue
-        fi
-        
-        if [[ "$found_separator" == true ]]; then
-            cmd="${cmd:+$cmd }$arg"
-        else
-            title="${title:+$title }$arg"
-        fi
-    done
-    
-    # Execute the command with gum spin
-    gum spin --spinner dot --title "${title}..." -- $cmd
+    local message="$1"
+    local command="${@:2}"
+    gum spin --spinner dot --title "$message" -- bash -c "$command"
 }

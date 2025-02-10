@@ -14,7 +14,7 @@ divider
 
 primary_msg --bold "Updating Yum Package Manager..."
 if command -v yum &>/dev/null; then
-  gum spin --spinner line --title "yum update..." -- sleep 1
+  run_with_spinner "yum update..."  "sleep 1"
   if [ "$DRY_RUN" = false ]; then
     sudo yum update -y &>/dev/null
   else

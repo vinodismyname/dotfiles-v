@@ -66,7 +66,7 @@ divider
 heading "Step 1: Checking Homebrew"
 
 if ! command -v brew &>/dev/null; then
-  run_with_spinner "Installing Homebrew..." -- sleep 1
+  run_with_spinner "Installing Homebrew..." "sleep 1"
   echo
   gum style --foreground "$DIM" "Homebrew not found. Installing now..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -137,7 +137,7 @@ esac
 
 heading "Step 3: Updating Git Submodules"
 
-run_with_spinner "Cloning submodules..." -- bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive"
+run_with_spinner "Cloning submodules..." "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
 
@@ -154,7 +154,7 @@ if [ "$IS_MAC" = true ]; then
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (mac)" -- \
-      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
+      "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "macOS brew bundle complete"
   else
     warn_msg "No mac.Brewfile found."
@@ -164,7 +164,7 @@ elif [ "$IS_LINUX" = true ]; then
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (linux)" -- \
-      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
+      "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "Linux brew bundle complete"
   else
     warn_msg "No linux.Brewfile found."
@@ -255,7 +255,7 @@ if gum confirm "Install Rust via rustup?"; then
   if ! command -v rustc &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
       run_with_spinner "Installing Rust..." -- \
-        bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
       success_msg "Rust installation completed"
     else
       warn_msg "[DRY_RUN] Would install Rust via rustup."
@@ -285,7 +285,7 @@ if [ "$DRY_RUN" = true ]; then
   CMD+=(--no-color --only link)
   warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
 else
-  run_with_spinner "Running Dotbot..." -- bash -c "${CMD[*]}"
+  run_with_spinner "Running Dotbot..." "${CMD[*]}"
 fi
 
 divider

@@ -20,13 +20,13 @@ divider
 
 case "$PLATFORM" in
   darwin)
-    gum spin --spinner line --title "Dumping Brewfile (mac)..." -- \
-      brew bundle dump --force --file="$MAC_BREWFILE"
+    run_with_spinner "Dumping Brewfile (mac)..." -- \
+     'brew bundle dump --force --file="$MAC_BREWFILE"'
     success_msg "✓ Updated $MAC_BREWFILE with currently installed packages."
     ;;
   linux)
-    gum spin --spinner line --title "Dumping Brewfile (linux)..." -- \
-      brew bundle dump --force --file="$LINUX_BREWFILE"
+    run_with_spinner "Dumping Brewfile (linux)..." -- \
+      'brew bundle dump --force --file="$LINUX_BREWFILE"'
     success_msg "✓ Updated $LINUX_BREWFILE with currently installed packages."
     ;;
   *)

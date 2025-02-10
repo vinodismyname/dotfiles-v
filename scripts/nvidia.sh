@@ -15,8 +15,8 @@ DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"
 DRIVER_URL="https://us.download.nvidia.com/XFree86/Linux-x86_64/${DRIVER_VERSION}/${DRIVER_FILE}"
 
 if [ ! -f "$DRIVER_FILE" ]; then
-  gum spin --spinner dot --title "Downloading NVIDIA driver..." -- \
-    curl -LO "$DRIVER_URL"
+  run_with_spinner "Downloading NVIDIA driver..." \
+    'curl -LO "$DRIVER_URL"'
 fi
 
 chmod +x "$DRIVER_FILE"
@@ -28,8 +28,8 @@ CUDA_INSTALLER="cuda_12.2.2_535.104.05_linux.run"
 CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/${CUDA_INSTALLER}"
 
 if [ ! -f "$CUDA_INSTALLER" ]; then
-  gum spin --spinner dot --title "Downloading CUDA..." -- \
-    curl -LO "$CUDA_URL"
+  run_with_spinner "Downloading CUDA..." -- \
+    'curl -LO "$CUDA_URL"'
 fi
 
 chmod +x "$CUDA_INSTALLER"
