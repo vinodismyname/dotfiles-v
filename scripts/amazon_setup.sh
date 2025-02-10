@@ -41,8 +41,7 @@ else
 fi
 
 
-divider
-
+echo
 # ─────────────────────────────────────────────────────────────────────────────
 # Brazil / Builder-Tools
 # ─────────────────────────────────────────────────────────────────────────────
@@ -70,7 +69,7 @@ fi
 # relinking brew pkg-config after install
 run_with_spinner "Relinking Brew pkg-config" "brew link pkg-config"
 
-divider
+echo
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Workspace Setup
@@ -78,10 +77,11 @@ divider
 
 # 3. Create /workplace/${USER}
 
+info_msg "Verifying and Setting up Workplace Folder"
 run_with_spinner "Setting up workplace directory..." \
  "sudo mkdir -p -m 755 '$WORKPLACE_DIR' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
 
-info_msg "Verifying and Setting up Workplace Folder"
+
 if [ ! -d "$HOME/workplace" ]; then
   ln -s "$WORKPLACE_DIR" "$HOME/workplace"
   success_msg "Created symlink: ~/workplace -> $WORKPLACE_DIR"

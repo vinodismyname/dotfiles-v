@@ -8,7 +8,7 @@ set -euo pipefail
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-heading "Installing NVIDIA driver and CUDA..."
+subheading "Installing NVIDIA driver and CUDA..."
 
 DRIVER_VERSION="535.161.08"
 DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"
@@ -22,7 +22,7 @@ fi
 chmod +x "$DRIVER_FILE"
 sudo ./"$DRIVER_FILE" --no-questions --ui=none
 
-divider
+echo
 
 CUDA_INSTALLER="cuda_12.2.2_535.104.05_linux.run"
 CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/${CUDA_INSTALLER}"
@@ -35,7 +35,7 @@ fi
 chmod +x "$CUDA_INSTALLER"
 sudo ./"$CUDA_INSTALLER" --silent --toolkit
 
-divider
+echo
 
 grep -qxF 'export PATH=/usr/local/cuda-12.2/bin:$PATH' ~/.zshrc || \
 echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.zshrc

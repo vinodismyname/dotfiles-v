@@ -17,13 +17,13 @@ INFO_SYMBOL="•"
 
 ### Styling Functions
 heading() {
-    echo
+
     gum style --foreground "$PRIMARY" --bold "$ARROW_RIGHT $1"
     gum style --foreground "$DIM" "$(printf '━%.0s' $(seq 1 50))"
 }
 
 subheading() {
-    echo
+
     gum style --foreground "$PRIMARY" "  $INFO_SYMBOL $1"
     gum style --foreground "$DIM" "  $(printf '─%.0s' $(seq 1 40))"
 }

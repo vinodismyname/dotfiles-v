@@ -221,14 +221,17 @@ divider
 if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then
-      brew install awscli
+      run_with_spinner "Installing AWS cli" "brew install awscli"
+      if [ $? -eq 0 ]; then
+      success_msg "AWS cli Installed"
+      fi
     else
       warn_msg "[DRY_RUN] brew install awscli"
     fi
   elif [ "$IS_LINUX" = true ]; then
     if command -v yum &>/dev/null; then
       if [ "$DRY_RUN" = false ]; then
-        sudo yum install -y awscli
+        run_with_spinner "Installing AWS cli" "sudo yum install -y awscli"
       else
         warn_msg "[DRY_RUN] sudo yum install -y awscli"
       fi

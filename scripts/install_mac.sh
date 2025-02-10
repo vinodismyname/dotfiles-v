@@ -14,7 +14,6 @@ source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
 subheading "macOS-specific Setup"
 
-divider
 
 if confirm_action "Perform macOS software update? (Requires sudo)"; then
   if [ "$DRY_RUN" = false ]; then
