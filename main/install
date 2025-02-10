@@ -93,7 +93,7 @@ heading "Step 2: Ensuring Gum is Available"
 if ! command -v gum &>/dev/null; then
   dim_msg "Gum not found. Installing via Homebrew..."
   if [ "$DRY_RUN" = false ]; then
-    brew install gum
+    run_with_spinner "Installing Gum" "brew install gum"
   else
     warn_msg "[DRY_RUN] brew install gum"
   fi
