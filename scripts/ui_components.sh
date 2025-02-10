@@ -18,7 +18,6 @@ INFO_SYMBOL="•"
 
 ### Styling Functions
 heading() {
-    echo
     gum style --foreground "$HEADING" --bold "$ARROW_RIGHT $1"
     gum style --foreground "$DIM" "$(printf '━%.0s' $(seq 1 50))"
 }

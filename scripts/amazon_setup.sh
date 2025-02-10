@@ -16,6 +16,7 @@ if ! command -v toolbox &>/dev/null; then
   run_with_spinner "Toolbox not found. Attempting to install..." "sudo yum install -y toolbox"
   if [ $? -eq 0 ]; then
     success_msg "Toolbox installed."
+    export PATH=$PATH:~.toolbox/bin
   else
     error_msg "× Could not install Toolbox. Exiting Amazon setup."
     exit 1
