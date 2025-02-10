@@ -1,0 +1,224 @@
+#!/usr/bin/env bash
+#
+# install - Main dotfiles installation script
+#
+#
+
+set -euo pipefail
+
+# Parse Arguments
+#---------------------------
+DRY_RUN=false
+VERBOSE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    verbose)
+      VERBOSE=true
+      shift
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+# Prelim Checks & Env
+#---------------------------
+# Ensure we're in the dotfiles directory
+export DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DOTFILES_DIR"
+
+# Check for Homebrew and install if not present
+if ! command -v brew &>/dev/null; then
+  echo "Homebrew not found. Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Add Homebrew to PATH for the current session
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+
+# Check for gum and install if not present
+if ! command -v gum &>/dev/null; then
+  echo "gum not found. Installing via Homebrew..."
+  brew install gum
+fi
+
+# OS Detection
+#---------------------------
+OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
+IS_MAC=false
+IS_LINUX=false
+IS_AMZN=false
+HAS_NVIDIA=false
+
+if command -v mwinit &>/dev/null; 
+then IS_AMZN=true
+fi
+
+if [[ "$OS_NAME" == "darwin" ]]; then
+  IS_MAC=true
+elif [[ "$OS_NAME" == "linux" ]]; then
+  IS_LINUX=true
+else
+  echo "Unsupported OS: $OS_NAME"
+  exit 1
+fi
+
+# Intro & High-Level Steps (gum)
+#---------------------------
+gum style --border normal --margin "1" --padding "1" --bold --border-foreground "212" \
+  "Welcome to Your Dotfiles Installer"
+
+gum style --bold "This script will:"
+echo "1) Install or update basic dependencies."
+echo "2) Prompt you for additional packages and configuration."
+echo "3) Invoke Dotbot to link your dotfiles."
+echo
+
+if ! gum confirm "Shall we proceed?" --affirmative "Yes" --negative "No"; then
+  gum style --foreground 9 "Aborting install."
+  exit 0
+fi
+
+# Get submodules used
+#---------------------------
+gum style --bold "Installing Git Submodules"
+git submodule update --init --recursive
+
+echo "Test Done"
+
+# Platform-Specific Package Installation
+#---------------------------
+if [ "$IS_MAC" = true ]; then
+  gum style --bold "Installing macOS Homebrew Packages"
+  BREWFILE_PATH="$DOTFILES_DIR/Brewfiles/mac.Brewfile"
+
+  if [[ -f "$BREWFILE_PATH" ]]; then
+    gum spin --title "brew bundle --file=$BREWFILE_PATH" --spinner dot -- \
+      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY RUN] brew bundle --file=$BREWFILE_PATH'"
+  else
+    gum style --foreground 3 "No mac.Brewfile found."
+  fi
+
+  # Additional macOS-only steps can be placed in a separate script:
+  source "$DOTFILES_DIR/scripts/install_mac.sh" "$DRY_RUN"
+
+elif [ "$IS_LINUX" = true ]; then
+  gum style --bold "Installing Linux Homebrew Packages"
+  BREWFILE_PATH="$DOTFILES_DIR/Brewfiles/linux.Brewfile"
+
+  if [[ -f "$BREWFILE_PATH" ]]; then
+    gum spin --title "brew bundle --file=$BREWFILE_PATH" --spinner dot -- \
+      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY RUN] brew bundle --file=$BREWFILE_PATH'"
+  else
+    gum style --foreground 3 "No linux.Brewfile found."
+  fi
+
+  # Call additional Linux-specific logic
+  source "$DOTFILES_DIR/scripts/install_linux.sh" "$DRY_RUN"
+fi
+
+
+
+# Additional Tools / Conditional Installs
+#---------------------------
+
+if [ "$IS_LINUX" = true ] && sudo lshw | grep -i nvidia &>/dev/null; 
+  then HAS_NVIDIA=true
+fi
+
+# NVIDIA GPU detection
+if [ "$HAS_NVIDIA" = true ]; then
+  if gum confirm "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
+    [ "$DRY_RUN" = false ] && bash "$DOTFILES_DIR/scripts/nvidia.sh" || \
+      gum style --foreground 3 "[DRY_RUN] Would run scripts/nvidia.sh"
+  fi
+fi
+
+# Example: Docker group membership (Linux)
+if [ "$IS_LINUX" = true ] && gum confirm "Configure Docker group membership?"; then
+  if [ "$DRY_RUN" = false ]; then
+    sudo groupadd docker 2>/dev/null || true
+    sudo usermod -aG docker "$USER"
+    gum style --foreground 51 "Added $USER to 'docker' group (may require re-login)."
+  else
+    gum style --foreground 3 "[DRY_RUN] groupadd docker && usermod -aG docker $USER"
+  fi
+fi
+
+# AWS CLI + Amazon internal
+if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
+  if [ "$IS_MAC" = true ]; then
+    [ "$DRY_RUN" = false ] && brew install awscli || \
+      gum style --foreground 3 "[DRY_RUN] brew install awscli"
+  elif [ "$IS_LINUX" = true ]; then
+    if command -v yum &>/dev/null; then
+      [ "$DRY_RUN" = false ] && sudo yum install -y awscli || \
+        gum style --foreground 3 "[DRY_RUN] sudo yum install -y awscli"
+    fi
+  fi
+
+  # Check if it's an Amazon environment (toolbox presence, etc.)
+  if command -v mwinit &>/dev/null; then
+    gum style --bold "Amazon environment detected. Running amazon_setup.sh..."
+    if [ "$DRY_RUN" = false ]; then
+      bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
+    else
+      gum style --foreground 3 "[DRY_RUN] amazon/amazon_setup.sh"
+    fi
+  fi
+fi
+
+# Rust
+if gum confirm "Install Rust via rustup?"; then
+  if ! command -v rustc &>/dev/null; then
+    if [ "$DRY_RUN" = false ]; then
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    else
+      gum style --foreground 3 "[DRY_RUN] Would install Rust via rustup."
+    fi
+  else
+    gum style --foreground 3 "Rust is already installed."
+  fi
+fi
+
+# Dotbot for Linking Dotfiles (install.conf.yaml)
+#---------------------------
+gum style --bold "Running Dotbot to link dotfiles..."
+
+# Dotbot binary path check
+DOTBOT_BIN="$DOTFILES_DIR/dotbot/bin/dotbot"
+if [ ! -x "$DOTBOT_BIN" ]; then
+  # fallback: run dotbot.py via Python
+  DOTBOT_BIN="python3 $DOTFILES_DIR/dotbot/dotbot.py"
+else
+  DOTBOT_BIN="$DOTFILES_DIR/dotbot/bin/dotbot"
+fi
+
+CMD=("$DOTBOT_BIN" -d "$DOTFILES_DIR" -c "$DOTFILES_DIR/install.conf.yaml")
+
+[ "$VERBOSE" = true ] && CMD+=(--verbose)
+if [ "$DRY_RUN" = true ]; then
+  # Just show what we'd do for linking
+  CMD+=(--no-color --only link)
+  gum style --foreground 3 "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
+else
+  "${CMD[@]}"
+fi
+
+#                               8. Final Message                              #
+gum style --border normal --margin "1" --padding "1" --border-foreground "10" \
+  "✨ Done! Your dotfiles are linked.
+
+If you changed shells or group memberships, you may need to restart your shell or log out/in.
+Happy coding!"

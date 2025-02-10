@@ -1,0 +1,22 @@
+# install.conf.yaml
+- defaults:
+    link:
+      create: true   # create parent directories as needed
+      relink: true   # if symlink already exists, remove it and link again
+    shell:
+      stdin: false
+      stdout: true
+      stderr: true
+
+- clean:
+  - ~  # Remove any dead symlinks in $HOME (that point into your dotfiles directory)
+
+- link:
+
+    ~/:
+      glob: true
+      path: dot_zsh/**
+
+    ~/.config/:
+      glob: true
+      path: dot_config/**

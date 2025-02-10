@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+export DOTFILES_PATH="$HOME/_dotfiles"
+
+echo "🚀 Booting Up"
+echo "-------------------------------------------------"
+echo
+
+handle_midway_auth() {
+    set +e  # Temporarily disable exit on error
+    mwinit -o
+    MWINIT_STATUS=$?
+    set -e
+    
+    if [ $MWINIT_STATUS -ne 0 ]; then
+        echo "❌ Midway authentication failed. Please try again."
+        exit 1
+    fi
+    echo "✔ Midway Authenticated!"
+}
+
+if command -v mwinit &>/dev/null; then
+    echo "🔒 Checking Midway authentication..."
+    AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
+    if ! echo "$AUTH_RESPONSE" | grep -q '"authenticated":true'; then
+        echo "❌ Midway authentication expired. Refreshing credentials..."
+        handle_midway_auth
+    else
+        EXPIRES_AT=$(echo "$AUTH_RESPONSE" | grep -o '"expires_at":[0-9]*' | cut -d':' -f2)
+        CURRENT_TIME=$(date +%s)
+        TIME_REMAINING=$((EXPIRES_AT - CURRENT_TIME))
+        if [ "$TIME_REMAINING" -lt 3600 ]; then
+            echo "⚠️  Midway credentials expiring soon. Refreshing..."
+            handle_midway_auth
+        else
+            echo "✔ Midway Authentication Present!"
+        fi
+    fi
+fi
+
+echo "-------------------------------------------------"
+echo "👉  Cloning into: '$DOTFILES_PATH'"
+
+git --version || {
+    echo "❌ Git is required but not installed."
+    exit 1
+}
+
+
+git clone --depth 1 ssh://git.amazon.com/pkg/Dotfiles-V "$DOTFILES_PATH"
+
+"$DOTFILES_PATH/main/install" "verbose"
+echo "✅ Installation completed successfully!"

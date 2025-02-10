@@ -1,0 +1,39 @@
+{
+  "Profiles": [
+    {
+      "Provider": "conduit",
+      "Account": "471112982248",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "compute"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "905418117496",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "compute-beta"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "381492190438",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "redshift"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "339712774678",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "personal"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "864899831455",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "carbon"
+    }
+  ]
+}
