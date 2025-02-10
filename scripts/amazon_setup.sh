@@ -6,12 +6,12 @@ set -euo pipefail
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 WORKPLACE_DIR="/workplace/${USER}"
 
-heading "Running Amazon environment setup..."
+subheading "Running Amazon environment setup..."
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Toolbox
 # ─────────────────────────────────────────────────────────────────────────────
-primary_msg "Initializing Toolbox..."
+info_msg "Initializing Toolbox..."
 
 # 1. Ensure Toolbox
 if ! command -v toolbox &>/dev/null; then
@@ -46,7 +46,7 @@ divider
 # ─────────────────────────────────────────────────────────────────────────────
 # Brazil / Builder-Tools
 # ─────────────────────────────────────────────────────────────────────────────
-primary_msg "Setting up Brazil / builder-tools..."
+info_msg "Setting up Brazil / builder-tools..."
 
 # unlinking brew pkg-config for mise to work
 run_with_spinner "Unlinking Brew pkg-config temporarily to avoid conflict with Builder-tool installs" "brew unlink pkg-config"
@@ -81,7 +81,7 @@ divider
 run_with_spinner "Setting up workplace directory..." \
  "sudo mkdir -p -m 755 '$WORKPLACE_DIR' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
 
-primary_msg "Verifying and Setting up Workplace Folder"
+info_msg "Verifying and Setting up Workplace Folder"
 if [ ! -d "$HOME/workplace" ]; then
   ln -s "$WORKPLACE_DIR" "$HOME/workplace"
   success_msg "Created symlink: ~/workplace -> $WORKPLACE_DIR"

@@ -14,7 +14,7 @@ MAC_BREWFILE="${BREWFILES_DIR}/mac.Brewfile"
 LINUX_BREWFILE="${BREWFILES_DIR}/linux.Brewfile"
 PLATFORM="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-heading "====> Updating Brewfiles from current system"
+subheading "Updating Brewfiles from current system"
 
 divider
 

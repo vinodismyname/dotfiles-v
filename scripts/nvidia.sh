@@ -8,7 +8,7 @@ set -euo pipefail
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-heading "====> Installing NVIDIA driver and CUDA..."
+heading "Installing NVIDIA driver and CUDA..."
 
 DRIVER_VERSION="535.161.08"
 DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"

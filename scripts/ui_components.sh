@@ -1,51 +1,68 @@
 #!/usr/bin/env bash
 
-### Colors for Gum styling (ANSI 256 color codes)
-PRIMARY=12    # A bright/cyan-like color for major headings
-SUCCESS=10    # Bright green for success
-HEADER=13     # Bright Purple for Headers
-WARNING=214   # Orange-ish for warnings
-ERROR=196     # Bright red for errors
-DIM=8         # Subtle/dim grey
 
-### A simple divider function for consistent separators
-divider() {
-  gum style --foreground "$DIM" -- "--------------------------------------------------------------------------------"
-}
+### Color Palette (ANSI 256 color codes)
+PRIMARY=39      # Bright blue
+SUCCESS=82      # Bright green
+WARNING=178     # Light orange
+ERROR=196       # Bright red
+INFO=75         # Sky blue
+DIM=240         # Elegant gray
 
-### A heading function for major steps
+### Unicode Characters
+CHECK_MARK="✓"
+CROSS_MARK="✗"
+ARROW_RIGHT="→"
+INFO_SYMBOL="•"
+
+### Styling Functions
 heading() {
-gum style --bold --foreground "$HEADER"  "==> $1"
-gum style --foreground "$DIM""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo
+    gum style --foreground "$PRIMARY" --bold "$ARROW_RIGHT $1"
+    gum style --foreground "$DIM" "$(printf '━%.0s' $(seq 1 50))"
 }
 
-### Primary Messages
-primary_msg() {
-    gum style --foreground "$PRIMARY" --bold  "$1"
+subheading() {
+    echo
+    gum style --foreground "$PRIMARY" "  $INFO_SYMBOL $1"
+    gum style --foreground "$DIM" "  $(printf '─%.0s' $(seq 1 40))"
 }
 
-### A success message function
+divider() {
+    echo
+    gum style --foreground "$DIM" "$(printf '┄%.0s' $(seq 1 50))"
+    echo
+}
+
+### Message Functions
 success_msg() {
-  gum style --foreground "$SUCCESS" "✓ $1"
+    gum style --foreground "$SUCCESS" "  $CHECK_MARK $1"
 }
 
-### An error message function
 error_msg() {
-  gum style --foreground "$ERROR" "× $1"
+    gum style --foreground "$ERROR" "  $CROSS_MARK $1"
 }
 
-### A warning message function
 warn_msg() {
-  gum style --foreground "$WARNING" "⚠ $1"
+    gum style --foreground "$WARNING" "  $INFO_SYMBOL $1"
 }
 
-### Dim Message
+info_msg() {
+    gum style --foreground "$INFO" "  $INFO_SYMBOL $1"
+}
+
 dim_msg() {
-gum style --foreground "$DIM" "$1"
+    gum style --foreground "$DIM" "    $1"
 }
 
+### Interactive Elements
 run_with_spinner() {
     local message="$1"
     local command="${@:2}"
-    gum spin --spinner dot --title "$message" -- bash -c "$command"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- bash -c "$command"
+}
+
+confirm_action() {
+    local message="$1"
+    gum confirm "$(gum style --foreground "$WARNING" "$message")" && return 0 || return 1
 }

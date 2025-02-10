@@ -8,11 +8,11 @@ DRY_RUN="${1:-false}"
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-heading "Linux-specific Setup"
+subheading "Linux-specific Setup"
 
 
 
-primary_msg "Updating Yum Package Manager..."
+info_msg "Updating Yum Package Manager..."
 if command -v yum &>/dev/null; then
   run_with_spinner "yum update..."  "sleep 1"
   if [ "$DRY_RUN" = false ]; then
@@ -24,7 +24,7 @@ if command -v yum &>/dev/null; then
 fi
 
 
-primary_msg "Installing Yum Default Packages..."
+info_msg "Installing Yum Default Packages..."
 PACKAGES=(lshw)
 for pkg in "${PACKAGES[@]}"; do
   if [ "$DRY_RUN" = false ]; then

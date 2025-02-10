@@ -52,9 +52,9 @@ echo "2) Prompt you for additional packages and configuration."
 echo "3) Invoke Dotbot to link your dotfiles."
 echo
 
-if ! gum confirm --affirmative "Yes" --negative "No" "Shall we proceed?"; then
-  warn_msg "Aborting install."
-  exit 0
+if ! confirm_action "Shall we proceed?"; then
+    warn_msg "Aborting install."
+    exit 0
 fi
 
 divider
@@ -150,7 +150,7 @@ divider
 heading "Step 4: Installing Platform-Specific Packages"
 
 if [ "$IS_MAC" = true ]; then
-  primary_msg "Installing macOS Homebrew Packages"
+  info_msg "Installing macOS Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (mac)"  \
@@ -160,7 +160,7 @@ if [ "$IS_MAC" = true ]; then
     warn_msg "No mac.Brewfile found."
   fi
 elif [ "$IS_LINUX" = true ]; then
-  primary_msg "Installing Linux Homebrew Packages"
+  info_msg "Installing Linux Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
     run_with_spinner "brew bundle (linux)"  \
@@ -185,7 +185,7 @@ if [ "$IS_LINUX" = true ] && sudo lshw 2>/dev/null | grep -i nvidia &>/dev/null;
 fi
 
 if [ "$HAS_NVIDIA" = true ]; then
-  if gum confirm "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
+  if confirm_action "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
     if [ "$DRY_RUN" = false ]; then
       bash "$DOTFILES_DIR/scripts/nvidia.sh"
     else
@@ -202,7 +202,7 @@ divider
 # Docker Group
 # ─────────────────────────────────────────────────────────────────────────────
 
-if [ "$IS_LINUX" = true ] && gum confirm "Configure Docker group membership?"; then
+if [ "$IS_LINUX" = true ] && confirm_action "Configure Docker group membership?"; then
   if [ "$DRY_RUN" = false ]; then
     sudo groupadd docker 2>/dev/null || true
     sudo usermod -aG docker "$USER"
@@ -218,7 +218,7 @@ divider
 # AWS CLI + Amazon environment
 # ─────────────────────────────────────────────────────────────────────────────
 
-if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
+if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then
       brew install awscli
@@ -237,7 +237,7 @@ if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applica
 
   # Amazon environment
   if command -v mwinit &>/dev/null; then
-    primary_msg "Amazon environment detected."
+    info_msg "Amazon environment detected."
     if [ "$DRY_RUN" = false ]; then
       bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
@@ -252,7 +252,7 @@ divider
 # Rust
 # ─────────────────────────────────────────────────────────────────────────────
 
-if gum confirm "Install Rust via rustup?"; then
+if confirm_action "Install Rust via rustup?"; then
   if ! command -v rustc &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
       run_with_spinner "Installing Rust..." -- \
