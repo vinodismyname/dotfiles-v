@@ -1,21 +1,14 @@
 #!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────────────────
 # scripts/nvidia.sh
 # Basic script to install NVIDIA drivers + CUDA on Linux
+# ─────────────────────────────────────────────────────────────────────────────
+
 set -euo pipefail
 
-PRIMARY=12
-SUCCESS=10
-HEADER=13
-WARNING=214
-ERROR=196
-DIM=8
+source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-divider() {
-  gum style --foreground "$DIM" -- "--------------------------------------------------------------------------------"
-}
-
-gum style --foreground "$HEADER" --bold "====> Installing NVIDIA driver and CUDA..."
-
+heading "====> Installing NVIDIA driver and CUDA..."
 
 DRIVER_VERSION="535.161.08"
 DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"
@@ -50,4 +43,4 @@ echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.zshrc
 grep -qxF 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' ~/.zshrc || \
 echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' >> ~/.zshrc
 
-gum style --bold  --foreground "$SUCCESS" "✓ NVIDIA driver + CUDA installation complete!"
+success_msg "✓ NVIDIA driver + CUDA installation complete!"

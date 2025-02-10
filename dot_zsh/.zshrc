@@ -3,36 +3,15 @@ source_if_exists() {
     [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
 }
 source_if_exists "$ZSH_CONFIG_FOLDER/config/os_detection.zsh"
-
 source_if_exists "$ZSH_CONFIG_FOLDER/config/pre_zsh.zsh"
 ###############################################################################
-# cloud desktop setup envImprovement
-if [ "$IS_LINUX" = true ]; then
-    local ZSH=/apollo/env/envImprovement/bin/zsh
-
-    if [[ ${SHELL} != ${ZSH} && -e ${ZSH} ]]; then
-    typeset -g SHELL=${ZSH}
-    exec ${ZSH} -${-} "${@}"
-    fi
-
-    unset ZSH
-
-    if [[ -n "${VSCODE_GIT_ASKPASS_NODE}" ]]; then
-        export PATH=$(dirname ${VSCODE_GIT_ASKPASS_NODE})/bin/remote-cli:${PATH}
-    fi
-
-fi
-
 # Helper Function
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-
 # ###############################################################################
 # # Load core shell settings 
-
 source "$ZSH_CONFIG_FOLDER/config/setopt.zsh"  #opt settings
 source "$ZSH_CONFIG_FOLDER/config/zstyles.zsh"  #zstyles
 
@@ -113,10 +92,11 @@ fi
 source_if_exists "$ZSH_CONFIG_FOLDER/functions/aws_profile_switcher.zsh"
 
 ##############################################################################
-#(Optional) Source Zellij Manager near the end
+#source syntax higlighting 
+source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+#Source Zellij Manager near the end
 export ZELLIJ_AUTO_START=false
 export ZELLIJ_AUTO_ATTACH=false
 source "$ZSH_CONFIG_FOLDER/config/zellij_manager.zsh"
 
-#last: source syntax higlighting 
-source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

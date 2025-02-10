@@ -68,6 +68,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
       /usr/share/zsh/site-functions
       /home/linuxbrew/.linuxbrew/share/zsh/site-functions
       $EDA_AUTO
+      $fpath
   )
 
   path=(
@@ -81,6 +82,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
       /{,usr/}{,s}bin
       /apollo/env/*/bin
       ${HOME}/go/bin
+      $path
   )
 
   manpath=(

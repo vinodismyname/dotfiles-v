@@ -3,76 +3,91 @@
 # amazon/amazon_setup.sh - Amazon-specific environment setup
 #
 set -euo pipefail
+source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
+WORKPLACE_DIR="/workplace/${USER}"
 
-PRIMARY=12
-SUCCESS=10
-HEADER=13
-WARNING=214
-ERROR=196
-DIM=8
+heading "====> Running Amazon environment setup..."
+divider
 
-divider() {
-  gum style --foreground "$DIM" -- "--------------------------------------------------------------------------------"
-}
-
-gum style --foreground "$HEADER" --bold "====> Running Amazon environment setup..."
-
+# ─────────────────────────────────────────────────────────────────────────────
+# Toolbox
+# ─────────────────────────────────────────────────────────────────────────────
+primary_msg "Initializing Toolbox..."
 
 # 1. Ensure Toolbox
 if ! command -v toolbox &>/dev/null; then
-  gum style --foreground "$DIM" "Toolbox not found. Attempting to install..."
-  if sudo yum install -y toolbox &>/dev/null; then
-    gum style --foreground "$SUCCESS" "✓ Toolbox installed."
+  run_with_spinner "Toolbox not found. Attempting to install..." -- sudo yum install -y toolbox
+  if [ $? -eq 0 ]; then
+    success_msg "✓ Toolbox installed."
   else
-    gum style --foreground "$ERROR" "× Could not install Toolbox. Exiting Amazon setup."
+    error_msg "× Could not install Toolbox. Exiting Amazon setup."
     exit 1
   fi
 else
-  gum style --foreground "$SUCCESS" "✓ Toolbox is already installed."
+  success_msg "✓ Toolbox is already installed."
 fi
 
-divider
-
-gum style --foreground "$DIM" "Updating Toolbox..."
-toolbox update &>/dev/null
-
-divider
-
-# 2. Brazil / builder-tools via toolbox
-gum style --foreground "$PRIMARY" --bold "Attempting to install Brazil / builder-tools..."
-if toolbox install eda axe &>/dev/null; then
-  gum style --foreground "$SUCCESS" "✓ Toolbox packages installed."
+run_with_spinner "Updating Toolbox..." -- toolbox update
+if [ $? -eq 0 ]; then
+  success_msg "✓ Toolbox Updated."
 else
-  gum style --foreground "$WARNING" "Could not install toolbox packages. Continuing anyway..."
+  warn_msg "× Could not update Toolbox. Proceeding anyways.."
 fi
+
+divider
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Brazil / Builder-Tools
+# ─────────────────────────────────────────────────────────────────────────────
+primary_msg "Setting up Brazil / builder-tools..."
+run_with_spinner "Installing Brazil packages..." -- toolbox install eda axe
+if [ $? -eq 0 ]; then
+  success_msg "✓ Toolbox packages installed."
+else
+  warn_msg "Could not install toolbox packages. Continuing anyway..."
+fi
+
+# unlinking brew pkg-config for mise to work
+run_with_spinner "Unlinking Brew pkg-config temporarily to avoid conflict with Builder-tool installs" -- brew unlink pkg-config
 
 # Run axe init in the background or in a subshell
-if yes | axe init builder-tools &>/dev/null; then
-  gum style --foreground "$SUCCESS" "✓ builder-tools initialized."
-else
-  gum style --foreground "$WARNING" "Could not initialize builder-tools. Continuing anyway..."
-fi
+run_with_spinner "Initializing builder-tools with AxE..." -- bash -c 'yes | axe init builder-tools'
 
-divider
+if [ $? -eq 0 ]; then
+  success_msg "✓ builder-tools initialized."
+else
+  warn_msg "Could not initialize builder-tools. Continuing anyway..."
+fi
 
 if command -v brazil &>/dev/null; then
-  brazil setup completion &>/dev/null || true
+  run_with_spinner "Setting up Brazil completions..." -- bash -c 'brazil setup completion || true'
+  success_msg "✓ brazil completions initialized."
 else
-  gum style --foreground "$DIM" "brazil command not found. Skipping Brazil completion setup."
+  dim_msg "brazil command not found. Skipping Brazil completion setup."
 fi
 
+# relinking brew pkg-config after install
+run_with_spinner "Relinking Brew pkg-config" -- brew link pkg-config
+
 divider
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Workspace Setup
+# ─────────────────────────────────────────────────────────────────────────────
 
 # 3. Create /workplace/${USER}
-WORKPLACE_DIR="/workplace/${USER}"
-sudo mkdir -p -m 755 "$WORKPLACE_DIR"
-sudo chown -R "${USER}:amazon" "$WORKPLACE_DIR"
 
-gum style --foreground "$PRIMARY" --bold "Verifying and Setting up Workplace Folder"
+run_with_spinner "Setting up workplace directory..." \
+ -- bash -c "sudo mkdir -p -m 755 '$WORKPLACE_DIR' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
+
+primary_msg "Verifying and Setting up Workplace Folder"
 if [ ! -d "$HOME/workplace" ]; then
   ln -s "$WORKPLACE_DIR" "$HOME/workplace"
-  gum style --foreground "$SUCCESS" "✓ Created symlink: ~/workplace -> $WORKPLACE_DIR"
+  success_msg "✓ Created symlink: ~/workplace -> $WORKPLACE_DIR"
+else
+  warn_msg "× Already Exists -> $WORKPLACE_DIR"
 fi
 
 divider
-gum style --foreground "$SUCCESS" --bold "Amazon environment setup complete!"
+
+success_msg --bold "Amazon environment setup complete!"

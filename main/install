@@ -2,41 +2,12 @@
 #
 # install - Main dotfiles installation script
 #
+
+# Base Setup
+#---------------------------
 set -euo pipefail
 
-### Colors for Gum styling (ANSI 256 color codes)
-PRIMARY=12    # A bright/cyan-like color for major headings
-SUCCESS=10    # Bright green for success
-HEADER=13     # Bright Purple for Headers
-WARNING=214   # Orange-ish for warnings
-ERROR=196     # Bright red for errors
-DIM=8         # Subtle/dim grey
-
-### A simple divider function for consistent separators
-divider() {
-  gum style --foreground "$DIM" -- "--------------------------------------------------------------------------------"
-}
-
-### A heading function for major steps
-heading() {
-  gum style --foreground "$HEADER" \
-     --bold "==> $1"
-}
-
-### A success message function
-success_msg() {
-  gum style --foreground "$SUCCESS" "✓ $1"
-}
-
-### An error message function
-error_msg() {
-  gum style --foreground "$ERROR" "× $1"
-}
-
-### A warning message function
-warn_msg() {
-  gum style --foreground "$WARNING" "⚠ $1"
-}
+source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
 # Parse Arguments
 #---------------------------
@@ -95,7 +66,7 @@ divider
 heading "Step 1: Checking Homebrew"
 
 if ! command -v brew &>/dev/null; then
-  gum spin --spinner dot --title "Installing Homebrew..." -- sleep 1
+  run_with_spinner "Installing Homebrew..." -- sleep 1
   echo
   gum style --foreground "$DIM" "Homebrew not found. Installing now..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -166,7 +137,7 @@ esac
 
 heading "Step 3: Updating Git Submodules"
 
-gum spin --spinner line --title "Cloning submodules..." -- \
+run_with_spinner "Cloning submodules..." -- \
   bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive" &>/dev/null
 
 success_msg "Git submodules updated"
@@ -180,20 +151,20 @@ divider
 heading "Step 4: Installing Platform-Specific Packages"
 
 if [ "$IS_MAC" = true ]; then
-  gum style --foreground "$PRIMARY" --bold "Installing macOS Homebrew Packages"
+  primary_msg "Installing macOS Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
-    gum spin --spinner minidot --title "brew bundle (mac)" -- \
+    grun_with_spinner "brew bundle (mac)" -- \
       bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "macOS brew bundle complete"
   else
     warn_msg "No mac.Brewfile found."
   fi
 elif [ "$IS_LINUX" = true ]; then
-  gum style --foreground "$PRIMARY" --bold "Installing Linux Homebrew Packages"
+  primary_msg "Installing Linux Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
-    gum spin --spinner minidot --title "brew bundle (linux)" -- \
+    run_with_spinner "brew bundle (linux)" -- \
       bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "Linux brew bundle complete"
   else
@@ -266,7 +237,7 @@ if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applica
 
   # Amazon environment
   if command -v mwinit &>/dev/null; then
-    gum style --foreground "$PRIMARY" --bold "Amazon environment detected."
+    primary_msg "Amazon environment detected."
     if [ "$DRY_RUN" = false ]; then
       bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
@@ -284,7 +255,7 @@ divider
 if gum confirm "Install Rust via rustup?"; then
   if ! command -v rustc &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      gum spin --spinner monkey --title "Installing Rust..." -- \
+      run_with_spinner "Installing Rust..." -- \
         bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
       success_msg "Rust installation completed"
     else
@@ -315,8 +286,7 @@ if [ "$DRY_RUN" = true ]; then
   CMD+=(--no-color --only link)
   warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
 else
-  # Use a spinner around Dotbot
-  gum spin --spinner hamburger --title "Running Dotbot..." -- bash -c "${CMD[*]}"
+  run_with_spinner "Running Dotbot..." -- bash -c "${CMD[*]}"
 fi
 
 divider
