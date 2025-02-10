@@ -153,7 +153,7 @@ if [ "$IS_MAC" = true ]; then
   primary_msg "Installing macOS Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
-    run_with_spinner "brew bundle (mac)" -- \
+    run_with_spinner "brew bundle (mac)"  \
       "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "macOS brew bundle complete"
   else
@@ -163,7 +163,7 @@ elif [ "$IS_LINUX" = true ]; then
   primary_msg "Installing Linux Homebrew Packages"
   BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
   if [[ -f "$BREWFILE_PATH" ]]; then
-    run_with_spinner "brew bundle (linux)" -- \
+    run_with_spinner "brew bundle (linux)"  \
       "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
     success_msg "Linux brew bundle complete"
   else
@@ -173,11 +173,12 @@ elif [ "$IS_LINUX" = true ]; then
   source "$DOTFILES_DIR/scripts/install_linux.sh" "$DRY_RUN"
 fi
 
-divider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # GPU / NVIDIA detection
 # ─────────────────────────────────────────────────────────────────────────────
+
+divider
 
 if [ "$IS_LINUX" = true ] && sudo lshw 2>/dev/null | grep -i nvidia &>/dev/null; then
   HAS_NVIDIA=true
