@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
 
-### Color Palette (ANSI 256 color codes)
-PRIMARY=27      # Deep sky blue - for primary content
-HEADING=69      # Ocean blue - for main headings
-SUBHEADING=74   # Medium blue - for subheadings
-SUCCESS=82      # Bright green
-WARNING=178     # Light orange
-ERROR=196       # Bright red
-INFO=75         # Sky blue
-DIM=240         # Elegant gray
+PRIMARY=51      # Bright cyan (#00ffff) 
+HEADING=213     # Bright magenta (#ff87ff)
+SUBHEADING=123  # Light cyan (#87ffff)
+SUCCESS=120     # Bright green (#87ff87)
+WARNING=228     # Bright yellow (#ffff87)
+ERROR=204       # Bright coral (#ff5f87) 
+INFO=117        # Light blue (#87d7ff)
+DIM=244         # Medium gray (#808080)
 
 ### Unicode Characters
 CHECK_MARK="✓"
