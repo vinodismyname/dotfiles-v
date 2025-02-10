@@ -32,6 +32,7 @@ else
   warn_msg "Could not update Toolbox. Proceeding anyways.."
 fi
 
+export PATH=$PATH:~/.toolbox/bin
 run_with_spinner "Installing Brazil packages..." "toolbox install eda axe"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox packages installed."
