@@ -91,7 +91,7 @@ divider
 heading "Step 2: Ensuring Gum is Available"
 
 if ! command -v gum &>/dev/null; then
-  gum style --foreground "$DIM" "Gum not found. Installing via Homebrew..."
+  dim_msg "Gum not found. Installing via Homebrew..."
   if [ "$DRY_RUN" = false ]; then
     brew install gum
   else
