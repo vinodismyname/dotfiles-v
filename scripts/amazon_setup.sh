@@ -87,6 +87,6 @@ else
   warn_msg "Already Exists -> $WORKPLACE_DIR"
 fi
 
-divider
+echo
 
 success_msg "Amazon environment setup complete!"

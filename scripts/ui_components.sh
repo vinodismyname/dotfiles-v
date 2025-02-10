@@ -2,7 +2,9 @@
 
 
 ### Color Palette (ANSI 256 color codes)
-PRIMARY=159     # Seafoam
+PRIMARY=27      # Deep sky blue - for primary content
+HEADING=69      # Ocean blue - for main headings
+SUBHEADING=74   # Medium blue - for subheadings
 SUCCESS=82      # Bright green
 WARNING=178     # Light orange
 ERROR=196       # Bright red
@@ -17,14 +19,14 @@ INFO_SYMBOL="•"
 
 ### Styling Functions
 heading() {
-
-    gum style --foreground "$PRIMARY" --bold "$ARROW_RIGHT $1"
+    echo
+    gum style --foreground "$HEADING" --bold "$ARROW_RIGHT $1"
     gum style --foreground "$DIM" "$(printf '━%.0s' $(seq 1 50))"
 }
 
 subheading() {
     echo
-    gum style --foreground "$PRIMARY" "  $INFO_SYMBOL $1"
+    gum style --foreground "$SUBHEADING" "  $INFO_SYMBOL $1"
     gum style --foreground "$DIM" "  $(printf '─%.0s' $(seq 1 40))"
 }
 

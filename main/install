@@ -262,7 +262,7 @@ if confirm_action "Install Rust via rustup?"; then
   fi
 fi
 
-divider
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Dotbot
