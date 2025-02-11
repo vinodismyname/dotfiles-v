@@ -1,4 +1,4 @@
-
+###############################################################################
 # FZF-TAB CONFIGURATION
 
 FZF_TAB_DEFAULT_OPTS="${FZF_DEF_COLOR_OPTS} ${FZF_DEF_LAYOUT_OPTS} ${FZF_DEF_HEADER}"

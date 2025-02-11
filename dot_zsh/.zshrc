@@ -1,21 +1,57 @@
 ###############################################################################
+
+#------------------------------------------------------------------------------
 # Helper Function
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+typeset -g POWERLEVEL9K_INSTANT_PROMPT
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-# ###############################################################################
-# # Load core shell settings 
+#------------------------------------------------------------------------------
+# Load core shell settings 
 source "${ZSH_CONFIG_FOLDER}/config/setopt.zsh"  #opt settings
 source "${ZSH_CONFIG_FOLDER}/config/zstyles.zsh"  #zstyles
 
-# ###############################################################################
+#------------------------------------------------------------------------------
+# Homebrew Plugins
+if [[ -d "$HOMEBREW_PREFIX/share" ]]; then
+    plugin_files=(
+        "zsh-autosuggestions/zsh-autosuggestions.zsh"
+        "powerlevel10k/powerlevel10k.zsh-theme"
+    )
+    for plugin in "${plugin_files[@]}"; do
+        source_if_exists "$HOMEBREW_PREFIX/share/$plugin"
+    done
+fi
+
+#------------------------------------------------------------------------------
+# Aliases and Custom zsh fuctions
+# FZF Configuration
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_tab_config.zsh"
+
+# source aliases
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/aliases.zsh"
+# source function to browse and cd into workspace directories
+if [ "$IS_AMZN" = true ]; then
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/brazil_workspace_switcher.zsh"
+fi
+# source function to select aws profiles with fzf
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/aws_profile_switcher.zsh"
+
+#------------------------------------------------------------------------------
 # Completions & Auto-suggestions
 
-# Brazil completion
-if [ "$IS_AMZN" = true ]; then
-    # source_if_exists "$HOME/.brazil_completion/zsh_completion"
-    source_if_exists "/apollo/env/envImprovement/var/zshrc"
+# Create Cache and Compile completions
+autoload -Uz compinit
+zsh_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+mkdir -p "$zsh_cache"
+zcompdump="$zsh_cache/zcompdump"
+if [[ -f "$zcompdump"(#qNm-1) ]]; then
+  compinit -u -d "$zcompdump"
+else
+  compinit -d "$zcompdump"
+  touch "$zcompdump"
 fi
 
 # UV/UVX completion
@@ -33,58 +69,28 @@ eval "$(atuin init zsh)"
 # direnv
 eval "$(direnv hook zsh)"
 
-# compile completions
-autoload -Uz compinit
-if [[ -f ~/.zcompdump(#qNm-1) ]]; then
-  compinit -u
-else
-  compinit
-  touch ~/.zcompdump
-fi
-###############################################################################
-# Manually source other scripts/plugins:
-# mise completions
 if [[ -f "$HOME/.local/bin/mise" ]]; then
     "$HOME/.local/bin/mise" completions zsh > "$HOME/.local/share/mise/completions.zsh"
     source_if_exists "$HOME/.local/share/mise/completions.zsh"
 fi
 
-if [[ -d "$HOMEBREW_PREFIX/share" ]]; then
-    plugin_files=(
-        "zsh-autosuggestions/zsh-autosuggestions.zsh"
-        "powerlevel10k/powerlevel10k.zsh-theme"
-    )
-    for plugin in "${plugin_files[@]}"; do
-        source_if_exists "$HOMEBREW_PREFIX/share/$plugin"
-    done
-fi
-
-# # personal Powerlevel10k config:
-source_if_exists "$HOME/.p10k.zsh"
-###############################################################################
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 source <(carapace _carapace)
 
-# FZF Configuration
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_tab_config.zsh"
-###############################################################################
-# Aliases and custom zsh fuctions
-# source aliases
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/aliases.zsh"
-# source function to browse and cd into workspace directories
-if [ "$IS_AMZN" = true ]; then
-source_if_exists "${ZSH_CONFIG_FOLDER}/functions/brazil_workspace_switcher.zsh"
-fi
-# source function to select aws profiles with fzf
-source_if_exists "${ZSH_CONFIG_FOLDER}/functions/aws_profile_switcher.zsh"
+#------------------------------------------------------------------------------
+# personal Powerlevel10k config:
+source_if_exists "$HOME/.p10k.zsh"
 
-##############################################################################
+#------------------------------------------------------------------------------
 #source syntax higlighting 
 source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
+#------------------------------------------------------------------------------
 #Source Zellij Manager near the end
 export ZELLIJ_AUTO_START=false
 export ZELLIJ_AUTO_ATTACH=false
 source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
+
+###############################################################################
+

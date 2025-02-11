@@ -1,3 +1,5 @@
+###############################################################################
+#------------------------------------------------------------------------------
 #load helpers
 export ZSH_CONFIG_FOLDER=$(readlink -f "$HOME/_zsh")
 source_if_exists() {
@@ -5,24 +7,30 @@ source_if_exists() {
 }
 source_if_exists "${ZSH_CONFIG_FOLDER}/config/os_detection.zsh"
 
+#------------------------------------------------------------------------------
 #histfile
 export HISTFILE=~/.history
 export HISTSIZE=50000
 export SAVEHIST=50000
+
+#------------------------------------------------------------------------------
 # Pager and display settings
 export PAGER=less
 export MANPAGER=less
 export LESS='-R'
 
+#------------------------------------------------------------------------------
 # Bat Configuration
 export BAT_THEME="DarkNeon"
 export BAT_STYLE="numbers"
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 
+#------------------------------------------------------------------------------
 #Go Configuration
 export GOPATH=$HOME/go
 export GOPROXY=direct
 
+#------------------------------------------------------------------------------
 #Homebrew Configuration
 if [ "$IS_LINUX" = true ]; then 
   export HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
@@ -36,6 +44,7 @@ if [[ -f "$HOMEBREW_PREFIX/bin/brew" ]]; then
 eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 fi
 
+#------------------------------------------------------------------------------
 # Linux Specific Configuration
 if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   # AWS Configuration
@@ -71,12 +80,12 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   typeset -U FPATH fpath PATH path MANPATH manpath MODULE_PATH module_path
 
   fpath=(
-      $fpath
       /apollo/env/envImprovement/var/zsh/functions/*(om[1])
       /apollo/env/envImprovement/var/share/zsh/*{,/functions,site-functions}
       /usr/share/zsh/site-functions
       /home/linuxbrew/.linuxbrew/share/zsh/site-functions
       $EDA_AUTO
+      $fpath
   )
 
   path=(
@@ -108,6 +117,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
 
 fi
 
+#------------------------------------------------------------------------------
 # Mac Specific Configuration
 if [ "$IS_MAC" = true ];
 then export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -132,3 +142,4 @@ then export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/
   done
 fi
 fi
+###############################################################################
