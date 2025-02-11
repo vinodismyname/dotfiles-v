@@ -30,7 +30,8 @@ source "${ZSH_CONFIG_FOLDER}/config/zstyles.zsh"  #zstyles
 
 # Brazil completion
 if [ "$IS_AMZN" = true ]; then
-    source_if_exists "$HOME/.brazil_completion/zsh_completion"
+    # source_if_exists "$HOME/.brazil_completion/zsh_completion"
+    source_if_exists "/apollo/env/envImprovement/var/zshrc"
 fi
 
 
