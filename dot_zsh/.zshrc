@@ -55,7 +55,7 @@ eval "$(direnv hook zsh)"
 # Manually source other scripts/plugins:
 # mise completions
 if [[ -f "$HOME/.local/bin/mise" ]]; then
-    eval "$("$HOME/.local/bin/mise" activate zsh)"
+    "$HOME/.local/bin/mise" completions zsh > "$HOME/.local/share/mise/completions.zsh"
     source_if_exists "$HOME/.local/share/mise/completions.zsh"
 fi
 
