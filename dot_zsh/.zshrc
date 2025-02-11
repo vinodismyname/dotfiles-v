@@ -4,6 +4,15 @@ source_if_exists() {
 }
 source_if_exists "~/_zsh/config/os_detection.zsh"
 source_if_exists "~/_zsh/config/pre_zsh.zsh"
+
+autoload -Uz compinit
+if [[ -f ~/.zcompdump(#qNm-1) ]]; then
+  compinit -u
+else
+  compinit
+  touch ~/.zcompdump
+fi
+
 ###############################################################################
 # Helper Function
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
@@ -38,15 +47,6 @@ eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 # direnv
 eval "$(direnv hook zsh)"
-
-
-autoload -Uz compinit
-if [[ -f ~/.zcompdump(#qNm-1) ]]; then
-  compinit -u
-else
-  compinit
-  touch ~/.zcompdump
-fi
 
 
 ###############################################################################
@@ -99,4 +99,3 @@ source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-high
 export ZELLIJ_AUTO_START=false
 export ZELLIJ_AUTO_ATTACH=false
 source "~/_zsh/config/zellij_manager.zsh"
-

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-export DOTFILES_PATH="$HOME/_dotfiles"
+export DOTFILES_PATH="~/_dotfiles"
 
 # Pretty print function
 pp() {
