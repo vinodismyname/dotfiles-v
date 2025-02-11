@@ -132,7 +132,7 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 
 subheading "GPU Setup"
-if [ "$IS_LINUX" = true ] && sudo lshw 2>/dev/null | grep -i nvidia &>/dev/null; then
+if [ "$IS_LINUX" = true ] && sudo /sbin/lshw 2>/dev/null | grep -i nvidia &>/dev/null; then
   HAS_NVIDIA=true
 fi
 
