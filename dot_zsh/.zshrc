@@ -1,20 +1,4 @@
 ###############################################################################
-export ZSH_CONFIG_FOLDER=$(readlink -f "$HOME/_zsh")
-source_if_exists() {
-    [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
-}
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/os_detection.zsh"
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/pre_zsh.zsh"
-
-autoload -Uz compinit
-if [[ -f ~/.zcompdump(#qNm-1) ]]; then
-  compinit -u
-else
-  compinit
-  touch ~/.zcompdump
-fi
-
-###############################################################################
 # Helper Function
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -34,7 +18,6 @@ if [ "$IS_AMZN" = true ]; then
     source_if_exists "/apollo/env/envImprovement/var/zshrc"
 fi
 
-
 # UV/UVX completion
 if command -v uv >/dev/null; then
     eval "$(uv generate-shell-completion zsh)"
@@ -50,7 +33,14 @@ eval "$(atuin init zsh)"
 # direnv
 eval "$(direnv hook zsh)"
 
-
+# compile completions
+autoload -Uz compinit
+if [[ -f ~/.zcompdump(#qNm-1) ]]; then
+  compinit -u
+else
+  compinit
+  touch ~/.zcompdump
+fi
 ###############################################################################
 # Manually source other scripts/plugins:
 # mise completions
@@ -58,7 +48,6 @@ if [[ -f "$HOME/.local/bin/mise" ]]; then
     "$HOME/.local/bin/mise" completions zsh > "$HOME/.local/share/mise/completions.zsh"
     source_if_exists "$HOME/.local/share/mise/completions.zsh"
 fi
-
 
 if [[ -d "$HOMEBREW_PREFIX/share" ]]; then
     plugin_files=(
@@ -73,11 +62,9 @@ fi
 # # personal Powerlevel10k config:
 source_if_exists "$HOME/.p10k.zsh"
 ###############################################################################
-
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 source <(carapace _carapace)
-
 
 # FZF Configuration
 source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"

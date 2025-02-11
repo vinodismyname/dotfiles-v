@@ -1,3 +1,10 @@
+#load helpers
+export ZSH_CONFIG_FOLDER=$(readlink -f "$HOME/_zsh")
+source_if_exists() {
+    [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
+}
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/os_detection.zsh"
+
 #histfile
 export HISTFILE=~/.history
 export HISTSIZE=50000
@@ -12,7 +19,11 @@ export BAT_THEME="DarkNeon"
 export BAT_STYLE="numbers"
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 
+#Go Configuration
+export GOPATH=$HOME/go
+export GOPROXY=direct
 
+#Homebrew Configuration
 if [ "$IS_LINUX" = true ]; then 
   export HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
 elif [ "$IS_MAC" = true ]; then 
@@ -21,10 +32,11 @@ fi
 
 export HOMEBREW_CELLAR=${HOMEBREW_PREFIX}/Cellar
 export HOMEBREW_REPOSITORY=${HOMEBREW_PREFIX}/Homebrew
+if [[ -f "$HOMEBREW_PREFIX/bin/brew" ]]; then
 eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
+fi
 
-
-
+# Linux Specific Configuration
 if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   # AWS Configuration
   export AWS_EC2_METADATA_DISABLED=true
@@ -73,9 +85,11 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
       ~/bin
       ~/.{cargo,local,toolbox}/bin
       ${HOMEBREW_PREFIX}/{,s}bin
+      ${GOPATH}/bin
+      /usr/local/sessionmanagerplugin/bin
       /apollo/env/envImprovement/bin
+      /{,usr/}{,s}bin
       /apollo/env/*/bin
-      ${HOME}/go/bin
       $path
   )
 
@@ -94,6 +108,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
 
 fi
 
+# Mac Specific Configuration
 if [ "$IS_MAC" = true ];
 then export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 

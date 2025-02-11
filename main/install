@@ -213,9 +213,12 @@ if confirm_action "Install Rust via rustup?"; then
   else
     dim_msg "Rust is already installed."
   fi
+else
+   dim_msg "Rust installation skipped."
 fi
 
 divider
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Dotbot
