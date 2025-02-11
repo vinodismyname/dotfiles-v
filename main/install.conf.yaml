@@ -2,10 +2,11 @@
 - defaults:
     link:
       create: true   # create parent directories as needed
+        mode: 0755
       relink: true   # if symlink already exists, remove it and link again
       force: true
     shell:
-      stdin: false
+      stdin: true
       stdout: true
       stderr: true
 
