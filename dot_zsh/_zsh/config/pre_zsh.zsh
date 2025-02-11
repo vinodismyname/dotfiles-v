@@ -1,4 +1,4 @@
-export ZSH_CONFIG_FOLDER="${HOME}/_zsh"
+export ZSH_CONFIG_FOLDER=$(realpath "$HOME/_zsh")
 
 #histfile
 export HISTFILE=~/.history

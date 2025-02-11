@@ -2,8 +2,9 @@
 source_if_exists() {
     [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
 }
-source_if_exists "~/_zsh/config/os_detection.zsh"
-source_if_exists "~/_zsh/config/pre_zsh.zsh"
+
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/os_detection.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/pre_zsh.zsh"
 
 autoload -Uz compinit
 if [[ -f ~/.zcompdump(#qNm-1) ]]; then
@@ -21,8 +22,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 # ###############################################################################
 # # Load core shell settings 
-source "~/_zsh/config/setopt.zsh"  #opt settings
-source "~/_zsh/config/zstyles.zsh"  #zstyles
+source "${ZSH_CONFIG_FOLDER}/config/setopt.zsh"  #opt settings
+source "${ZSH_CONFIG_FOLDER}/config/zstyles.zsh"  #zstyles
 
 # ###############################################################################
 # Completions & Auto-suggestions
@@ -78,18 +79,18 @@ source <(carapace _carapace)
 
 
 # FZF Configuration
-source_if_exists "~/_zsh/config/fzf_config.zsh"
-source_if_exists "~/_zsh/config/fzf_tab_config.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_tab_config.zsh"
 ###############################################################################
 # Aliases and custom zsh fuctions
 # source aliases
-source_if_exists "~/_zsh/config/aliases.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/aliases.zsh"
 # source function to browse and cd into workspace directories
 if [ "$IS_AMZN" = true ]; then
-source_if_exists "~/_zsh/functions/brazil_workspace_switcher.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/brazil_workspace_switcher.zsh"
 fi
 # source function to select aws profiles with fzf
-source_if_exists "~/_zsh/functions/aws_profile_switcher.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/aws_profile_switcher.zsh"
 
 ##############################################################################
 #source syntax higlighting 
@@ -98,4 +99,4 @@ source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-high
 #Source Zellij Manager near the end
 export ZELLIJ_AUTO_START=false
 export ZELLIJ_AUTO_ATTACH=false
-source "~/_zsh/config/zellij_manager.zsh"
+source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
