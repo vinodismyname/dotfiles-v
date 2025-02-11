@@ -24,7 +24,7 @@ heading() {
 
 subheading() {
     echo
-    gum style --foreground "$SUBHEADING" "  $INFO_SYMBOL $1"
+    gum style --foreground "$SUBHEADING" "  $ARROW_RIGHT $1"
     gum style --foreground "$DIM" "  $(printf '─%.0s' $(seq 1 40))"
     echo
 }

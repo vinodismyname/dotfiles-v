@@ -23,6 +23,7 @@ if command -v yum &>/dev/null; then
   success_msg "yum updated"
 fi
 
+echo
 
 info_msg "Installing Yum Default Packages..."
 PACKAGES=(lshw)

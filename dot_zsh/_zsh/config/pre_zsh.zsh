@@ -1,5 +1,3 @@
-export ZSH_CONFIG_FOLDER=$(realpath "$HOME/_zsh")
-
 #histfile
 export HISTFILE=~/.history
 export HISTSIZE=50000

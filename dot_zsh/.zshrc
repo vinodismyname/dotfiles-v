@@ -1,8 +1,8 @@
 ###############################################################################
+export ZSH_CONFIG_FOLDER=$(realpath "$HOME/_zsh")
 source_if_exists() {
     [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2
 }
-
 source_if_exists "${ZSH_CONFIG_FOLDER}/config/os_detection.zsh"
 source_if_exists "${ZSH_CONFIG_FOLDER}/config/pre_zsh.zsh"
 
