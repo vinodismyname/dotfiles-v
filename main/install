@@ -157,7 +157,7 @@ subheading "Docker Membership"
 if [ "$IS_LINUX" = true ] && confirm_action "Configure Docker group membership?"; then
   if [ "$DRY_RUN" = false ]; then
     sudo groupadd docker 2>/dev/null || true
-    sudo usermod -aG docker "$USER"
+    sudo /usr/sbin/usermod -aG docker "$USER"
     success_msg "Added $USER to 'docker' group (re-login may be required)."
   else
     warn_msg "[DRY_RUN] groupadd docker && usermod -aG docker $USER"
