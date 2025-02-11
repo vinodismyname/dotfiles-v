@@ -58,51 +58,6 @@ if ! confirm_action "Shall we proceed?"; then
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Check for Homebrew, install if needed
-# ─────────────────────────────────────────────────────────────────────────────
-
-heading "Step 1: Checking Homebrew"
-
-if ! command -v brew &>/dev/null; then
-  run_with_spinner "Installing Homebrew..." "sleep 1"
-  echo
-  dim_msg "Homebrew not found. Installing now..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &>/dev/null
-
-  # Add Homebrew to PATH for this session
-  if [[ -f /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  elif [[ -f /usr/local/bin/brew ]]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-  fi
-  success_msg "Homebrew installed"
-else
-  success_msg "Homebrew already installed"
-fi
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Check for gum
-# ─────────────────────────────────────────────────────────────────────────────
-
-heading "Step 2: Ensuring Gum is Available"
-
-if ! command -v gum &>/dev/null; then
-  dim_msg "Gum not found. Installing via Homebrew..."
-  if [ "$DRY_RUN" = false ]; then
-    run_with_spinner "Installing Gum" "brew install gum"
-  else
-    warn_msg "[DRY_RUN] brew install gum"
-  fi
-  success_msg "gum is installed"
-else
-  success_msg "gum is already installed"
-fi
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
 # OS Detection
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -133,7 +88,7 @@ esac
 # Git submodules
 # ─────────────────────────────────────────────────────────────────────────────
 
-heading "Step 3: Updating Git Submodules"
+heading "Step 1: Updating Git Submodules"
 
 run_with_spinner "Cloning submodules..." "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
@@ -145,7 +100,7 @@ divider
 # Platform-Specific Homebrew Installation
 # ─────────────────────────────────────────────────────────────────────────────
 
-heading "Step 4: Installing Platform-Specific Packages"
+heading "Step 2: Installing Platform-Specific Packages"
 
 if [ "$IS_MAC" = true ]; then
   subheading "Installing macOS Homebrew Packages"
@@ -266,7 +221,7 @@ divider
 # Dotbot
 # ─────────────────────────────────────────────────────────────────────────────
 
-heading "Step 5: Linking Dotfiles with Dotbot"
+heading "Step 3: Linking Dotfiles with Dotbot"
 DOTBOT_BIN="$DOTFILES_DIR/dotbot/bin/dotbot"
 if [ ! -x "$DOTBOT_BIN" ]; then
   DOTBOT_BIN="python3 $DOTFILES_DIR/dotbot/dotbot.py"
