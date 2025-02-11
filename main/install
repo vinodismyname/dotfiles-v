@@ -281,7 +281,6 @@ if confirm_action "Link Dotfiles?"; then
     CMD+=(--no-color --only link)
     warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
   else
-    mkdir -p "~/_zsh"
     run_with_spinner "Running Dotbot..." "${CMD[*]}"
     if [ $? -eq 0 ]; then
     success_msg "DotFiles Linked."
