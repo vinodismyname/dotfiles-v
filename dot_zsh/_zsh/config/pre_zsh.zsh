@@ -59,12 +59,12 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   typeset -U FPATH fpath PATH path MANPATH manpath MODULE_PATH module_path
 
   fpath=(
+      $fpath
       /apollo/env/envImprovement/var/zsh/functions/*(om[1])
       /apollo/env/envImprovement/var/share/zsh/*{,/functions,site-functions}
       /usr/share/zsh/site-functions
       /home/linuxbrew/.linuxbrew/share/zsh/site-functions
       $EDA_AUTO
-      $fpath
   )
 
   path=(
@@ -73,9 +73,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
       ~/bin
       ~/.{cargo,local,toolbox}/bin
       ${HOMEBREW_PREFIX}/{,s}bin
-      /usr/local/sessionmanagerplugin/bin
       /apollo/env/envImprovement/bin
-      /{,usr/}{,s}bin
       /apollo/env/*/bin
       ${HOME}/go/bin
       $path
