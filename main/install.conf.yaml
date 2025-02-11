@@ -2,7 +2,7 @@
 - defaults:
     link:
       create: true   # create parent directories as needed
-        mode: 0755
+      mode: 0755
       relink: true   # if symlink already exists, remove it and link again
       force: true
     shell:
