@@ -204,8 +204,7 @@ subheading "Rust Setup"
 if confirm_action "Install Rust via rustup?"; then
   if ! command -v rustc &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      run_with_spinner "Installing Rust..." -- \
-        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+      run_with_spinner "Installing Rust..." --  "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
       success_msg "Rust installation completed"
     else
       warn_msg "[DRY_RUN] Would install Rust via rustup."
