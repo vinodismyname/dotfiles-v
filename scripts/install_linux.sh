@@ -6,7 +6,7 @@ DRY_RUN="${1:-false}"
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-subheading "Linux-specific Setup"
+echo
 
 info_msg "Updating Yum Package Manager..."
 if command -v yum &>/dev/null; then

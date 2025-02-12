@@ -62,6 +62,7 @@ esac
 # Pre-check: Run Linux-Specific Script (for GPU detection, etc.)
 # -----------------------------------------------------------------------------
 if [ "$IS_LINUX" = true ]; then
+  echo
   heading "Pre-check: Running Linux Setup Script for GPU Detection..."
 
   if [ "$DRY_RUN" = false ]; then
@@ -76,6 +77,8 @@ HAS_NVIDIA=false
 if [ "$IS_LINUX" = true ] && command -v lspci &>/dev/null && sudo lspci 2>/dev/null | grep -i nvidia &>/dev/null; then
   HAS_NVIDIA=true
 fi
+
+divider 
 
 # -----------------------------------------------------------------------------
 # Welcome & Collect All User Choices Up Front
