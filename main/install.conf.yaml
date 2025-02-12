@@ -15,7 +15,6 @@
 - link:
     ~/.zshrc: dot_zsh/.zshrc
     ~/.p10k.zsh: dot_zsh/.p10k.zsh
-    ~/.zlogin: dot_zsh/.zlogin
     ~/.zshenv: dot_zsh/.zshenv
 
     ~/_zsh/:
