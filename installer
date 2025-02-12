@@ -24,6 +24,7 @@ handle_midway_auth() {
     fi
 }
 
+pp "→" "checking internal git connection"
 if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
   pp "!" "git not figured.. adding git.amazon.com to known hosts"
   ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
@@ -33,7 +34,7 @@ if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts
     pp "×" "Failed to add git.amazon.com to known hosts. Exiting."
     exit 1
   fi
-
+  pp "✓" "git.amazon.com is present in known hosts"
 fi
 
 if command -v mwinit &>/dev/null; then
