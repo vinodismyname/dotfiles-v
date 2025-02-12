@@ -100,8 +100,12 @@ source_if_exists "$HOME/.p10k.zsh"
 source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 #------------------------------------------------------------------------------
-#Source Zellij Manager near the end
+#Source Zellij Manager
+
+#whether Zellij should automatically launch when opening a new terminal
 export ZELLIJ_AUTO_START=false
+
+#whether to attach to existing sessions instead of creating new ones
 export ZELLIJ_AUTO_ATTACH=false
 source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
 

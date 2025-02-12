@@ -44,7 +44,7 @@ gum style \
   --padding "1" \
   --bold \
   --border-foreground "$PRIMARY" \
-  "Hello $USER. Time to configure some dotfiles!"
+  "Hello $USER. Time to setup your environment!"
 
 gum style --bold "This script will:"
 echo "1) Install or update basic dependencies."
