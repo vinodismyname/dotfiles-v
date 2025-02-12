@@ -24,32 +24,6 @@ fi
 source "${ZSH_CONFIG_FOLDER}/config/setopt.zsh"  #opt settings
 source "${ZSH_CONFIG_FOLDER}/config/zstyles.zsh"  #zstyles
 
-#------------------------------------------------------------------------------
-# Homebrew Plugins
-if [[ -d "$HOMEBREW_PREFIX/share" ]]; then
-    plugin_files=(
-        "zsh-autosuggestions/zsh-autosuggestions.zsh"
-        "powerlevel10k/powerlevel10k.zsh-theme"
-    )
-    for plugin in "${plugin_files[@]}"; do
-        source_if_exists "$HOMEBREW_PREFIX/share/$plugin"
-    done
-fi
-
-#------------------------------------------------------------------------------
-# Aliases and Custom zsh fuctions
-# FZF Configuration
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_tab_config.zsh"
-
-# source aliases
-source_if_exists "${ZSH_CONFIG_FOLDER}/config/aliases.zsh"
-# source function to browse and cd into workspace directories
-if [ "$IS_AMZN" = true ]; then
-source_if_exists "${ZSH_CONFIG_FOLDER}/functions/brazil_workspace_switcher.zsh"
-fi
-# source function to select aws profiles with fzf
-source_if_exists "${ZSH_CONFIG_FOLDER}/functions/aws_profile_switcher.zsh"
 
 #------------------------------------------------------------------------------
 # Completions & Auto-suggestions
@@ -89,6 +63,33 @@ fi
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 source <(carapace _carapace)
+
+#------------------------------------------------------------------------------
+# Homebrew Plugins
+if [[ -d "$HOMEBREW_PREFIX/share" ]]; then
+    plugin_files=(
+        "zsh-autosuggestions/zsh-autosuggestions.zsh"
+        "powerlevel10k/powerlevel10k.zsh-theme"
+    )
+    for plugin in "${plugin_files[@]}"; do
+        source_if_exists "$HOMEBREW_PREFIX/share/$plugin"
+    done
+fi
+
+#------------------------------------------------------------------------------
+# Aliases and Custom zsh fuctions
+# FZF Configuration
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_config.zsh"
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/fzf_tab_config.zsh"
+
+# source aliases
+source_if_exists "${ZSH_CONFIG_FOLDER}/config/aliases.zsh"
+# source function to browse and cd into workspace directories
+if [ "$IS_AMZN" = true ]; then
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/brazil_workspace_switcher.zsh"
+fi
+# source function to select aws profiles with fzf
+source_if_exists "${ZSH_CONFIG_FOLDER}/functions/aws_profile_switcher.zsh"
 
 #------------------------------------------------------------------------------
 # personal Powerlevel10k config:

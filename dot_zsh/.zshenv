@@ -1,6 +1,7 @@
 ###############################################################################
 #------------------------------------------------------------------------------
 #load helpers
+skip_global_compinit=1
 export ZSH_CONFIG_FOLDER=$(readlink -f "$HOME/_zsh")
 source_if_exists() {
     [[ -f "$1" ]] && source "$1" || echo "Warning: Could not source $1" >&2

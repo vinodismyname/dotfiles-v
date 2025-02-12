@@ -26,7 +26,8 @@ fi
 echo
 
 info_msg "Installing Yum Default Packages..."
-PACKAGES=(lshw)
+PACKAGES=(
+   pciutls)
 for pkg in "${PACKAGES[@]}"; do
   if [ "$DRY_RUN" = false ]; then
     if command -v yum &>/dev/null; then
