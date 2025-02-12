@@ -70,6 +70,12 @@ if ! command -v gum &>/dev/null; then
   pp "✓" "gum is installed"
 fi
 
+if [ -d "$DOTFILES_PATH" ]; then
+  pp "!" "${DOTFILES_PATH} exists..Deleting"
+  rm -rf "$DOTFILES_PATH"
+fi
+
+
 # Clone repository
 pp "→" "Cloning dotfiles..."
 git clone --quiet --no-progress --depth 1 https://github.com/vinodismyname/dotfiles-v.git "$DOTFILES_PATH" &>/dev/null || {
