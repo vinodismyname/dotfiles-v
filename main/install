@@ -95,7 +95,6 @@ gum style --bold "This script will:"
 echo "1) Install or update basic dependencies."
 echo "2) Prompt you for additional packages and configuration."
 echo "3) Invoke Dotbot to link your dotfiles."
-echo
 
 # Overall confirmation
 if ! confirm_action "Shall we proceed with the entire installation?"; then
