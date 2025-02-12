@@ -106,7 +106,7 @@ source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-high
 export ZELLIJ_AUTO_START=false
 
 #whether to attach to existing sessions instead of creating new ones
-export ZELLIJ_AUTO_ATTACH=false
+export ZELLIJ_AUTO_ATTACH=true
 source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
 
 ###############################################################################
