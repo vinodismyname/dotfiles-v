@@ -29,18 +29,12 @@ CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.2.2/local_instal
 
 if [ ! -f "$CUDA_INSTALLER" ]; then
   run_with_spinner "Downloading CUDA..." -- \
-    'curl -LO "$CUDA_URL"'
+    'curl -LO "${CUDA_URL}"'
 fi
 
 chmod +x "$CUDA_INSTALLER"
 sudo ./"$CUDA_INSTALLER" --silent --toolkit
 
 echo
-
-grep -qxF 'export PATH=/usr/local/cuda-12.2/bin:$PATH' ~/.zshrc || \
-echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.zshrc
-
-grep -qxF 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' ~/.zshrc || \
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' >> ~/.zshrc
 
 success_msg "✓ NVIDIA driver + CUDA installation complete!"

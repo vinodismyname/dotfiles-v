@@ -151,7 +151,7 @@ run_with_spinner "Cloning submodules..." \
   "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # Step 2: Installing Platform-Specific Packages (Homebrew)
@@ -184,7 +184,7 @@ else
   dim_msg "Skipping Homebrew package installation."
 fi
 
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # GPU / NVIDIA Setup
@@ -200,7 +200,7 @@ else
   dim_msg "Skipping NVIDIA setup."
 fi
 
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # Docker Group (Linux)
@@ -216,7 +216,7 @@ if [ "$IS_LINUX" = true ] && [ "$CONFIGURE_DOCKER" = true ]; then
   fi
 fi
 
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # AWS CLI + Amazon Environment
@@ -244,7 +244,7 @@ if [ "$INSTALL_AWS" = true ]; then
   fi
 fi
 
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # Rust
@@ -264,7 +264,7 @@ if [ "$INSTALL_RUST" = true ]; then
   fi
 fi
 
-divider
+echo
 
 # -----------------------------------------------------------------------------
 # Step 3: Linking Dotfiles with Dotbot
