@@ -1,5 +1,17 @@
 ###############################################################################
+#------------------------------------------------------------------------------
+# Load envImprovement zsh
 
+if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
+    local ZSH=/apollo/env/envImprovement/bin/zsh
+
+    if [[ ${SHELL} != ${ZSH} && -e ${ZSH} ]]; then
+    typeset -g SHELL=${ZSH}
+    exec ${ZSH} -${-} "${@}"
+    fi
+
+    unset ZSH
+fi
 #------------------------------------------------------------------------------
 # Helper Function
 
