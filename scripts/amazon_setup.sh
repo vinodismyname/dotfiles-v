@@ -8,22 +8,6 @@ WORKPLACE_DIR="/workplace/${USER}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Verifyin Internal Git connection
-# ─────────────────────────────────────────────────────────────────────────────
-info_msg "Initializing codefarm ssh connection"
-if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
-  run_with_spinner "Adding git.amazon.com to known hosts..." "ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts"
-  if [ $? -eq 0 ]; then
-    success_msg "Successfully added git.amazon.com to known hosts."
-  else
-    error_msg "Failed to add git.amazon.com to known hosts. Exiting."
-    exit 1
-  fi
-else
-  success_msg "git.amazon.com is already in known hosts."
-fi
-
-# ─────────────────────────────────────────────────────────────────────────────
 # Toolbox
 # ─────────────────────────────────────────────────────────────────────────────
 info_msg "Initializing Toolbox..."

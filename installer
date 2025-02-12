@@ -24,6 +24,18 @@ handle_midway_auth() {
     fi
 }
 
+if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
+  pp "!" "git not figured.. adding git.amazon.com to known hosts"
+  ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
+  if [ $? -eq 0 ]; then
+    pp "✓" "Successfully added git.amazon.com to known hosts."
+  else
+    pp "×" "Failed to add git.amazon.com to known hosts. Exiting."
+    exit 1
+  fi
+
+fi
+
 if command -v mwinit &>/dev/null; then
     AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
     
