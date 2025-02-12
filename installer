@@ -14,7 +14,7 @@ pp "→" "Starting setup..."
 
 handle_midway_auth() {
     set +e
-    mwinit -o
+    mwinit
     local status=$?
     set -e
     
