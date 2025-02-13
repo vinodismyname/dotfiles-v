@@ -26,7 +26,7 @@ else
   success_msg "Toolbox is already installed."
 fi
 
-run_with_spinner "Updating Toolbox..." "'${HOME}/.toolbox/bin/toolbox' update"
+run_with_spinner "Updating Toolbox..." "\"${HOME}/.toolbox/bin/toolbox\" update"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox Updated."
 else
@@ -34,7 +34,7 @@ else
 fi
 
 
-run_with_spinner "Installing Brazil packages..." "'${HOME}/.toolbox/bin/toolbox' install eda axe"
+run_with_spinner "Installing Brazil packages..." "\"${HOME}/.toolbox/bin/toolbox\" install eda axe"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox packages installed."
 else
@@ -52,7 +52,7 @@ info_msg "Setting up Brazil / builder-tools..."
 run_with_spinner "Unlinking Brew pkg-config temporarily to avoid conflict with Builder-tool installs" "brew unlink pkg-config"
 
 # Run axe init in the background or in a subshell
-run_with_spinner "Initializing builder-tools with AxE..." "yes | '${HOME}/.toolbox/bin/axe' init builder-tools &>/dev/null"
+run_with_spinner "Initializing builder-tools with AxE..." "yes | \"${HOME}/.toolbox/bin/axe\" init builder-tools &>/dev/null"
 if [ $? -eq 0 ]; then
   success_msg "builder-tools initialized."
 else
@@ -60,7 +60,7 @@ else
 fi
 
 if command -v "${HOME}/.toolbox/bin/brazil" &>/dev/null; then
-  run_with_spinner "Setting up Brazil completions..." "'${HOME}/.toolbox/bin/axe' setup completion || true"
+  run_with_spinner "Setting up Brazil completions..." " \"${HOME}/.toolbox/bin/axe\" setup completion || true"
   success_msg "brazil completions initialized."
 else
   dim_msg "brazil command not found. Skipping Brazil completion setup."
@@ -79,7 +79,7 @@ echo
 
 info_msg "Verifying and Setting up Workplace Folder"
 run_with_spinner "Setting up workplace directory..." \
- "sudo mkdir -p -m 755 '${WORKPLACE_DIR}' && sudo chown -R '${USER}:amazon' '${WORKPLACE_DIR}'"
+ "sudo mkdir -p -m 755 \"${WORKPLACE_DIR}\" && sudo chown -R \"${USER}:amazon\" \"${WORKPLACE_DIR}\" "
 
 
 if [ ! -d "${HOME}/workplace" ]; then
