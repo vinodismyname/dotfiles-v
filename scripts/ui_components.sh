@@ -82,11 +82,11 @@ run_with_spinner() {
     local sudo_prefix="sudo -u ${USER}"
     [ "$use_sudo" = true ] && sudo_prefix="sudo"
     
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- $sudo_prefix bash -c "$*"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- "$sudo_prefix" bash -c "$*"
 }
 
 
-confirm_action() {
+confirm_action() { 
     local message="$1"
     gum confirm "$(gum style --foreground "$WARNING" "$message")" && return 0 || return 1
 }
