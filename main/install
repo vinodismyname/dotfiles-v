@@ -158,7 +158,7 @@ divider
 heading "Step 1: Updating Git Submodules"
 
 run_with_spinner "Cloning submodules..." false \
-  "sudo -u \"$USER\" git submodule sync --quiet --recursive && git submodule update --init --recursive"
+  "sudo -u $USER git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
 echo
