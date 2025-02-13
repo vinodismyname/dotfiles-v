@@ -8,7 +8,7 @@ set -euo pipefail
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-subheading "Installing NVIDIA driver and CUDA..."
+subheading "Installing Nvidia driver and CUDA..."
 
 info_msg "Nvidia Driver Setup"
 DRIVER_VERSION="550.127.08"
@@ -19,9 +19,6 @@ if [ ! -f "$DRIVER_FILE" ]; then
   run_with_spinner "Downloading NVIDIA driver..." "curl -fSsl -O $DRIVER_URL"
   chmod +x "${HOME}/${DRIVER_FILE}"
 fi
-
-echo 
-
 run_with_spinner "Installing NVIDIA driver..." "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${DRIVER_FILE} --ui=none"
 echo
 
@@ -31,9 +28,10 @@ CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.4.1/local_instal
 run_with_spinner "Downloading CUDA..." -- "curl -LO \"${CUDA_URL}\""
 chmod +x "$CUDA_INSTALLER"
 run_with_spinner "installing CUDA" "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${CUDA_INSTALLER} --toolkit --silent"
+success_msg "CUDA Setup complete"
 
 # echo
-info_msg "Setting up NVIDIA Container Toolkit"
+info_msg "Setting up Nvidia Container Toolkit"
 sudo yum-config-manager --add-repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo  &>/dev/null
 run_with_spinner "Disabling graphics temporarily" "sudo yum-config-manager --disable amzn2-graphics &>/dev/null"
 run_with_spinner "Removing any existing nvidia-instances" "sudo yum erase -y libnvidia-container &>/dev/null"
@@ -43,6 +41,6 @@ run_with_spinner "Enabling graphics again" "sudo yum-config-manager --enable amz
 run_with_spinner "Installing Docker runtime" "sudo yum install -y docker-runtime-nvidia &>/dev/null"
 run_with_spinner "Configuring Container runtime" "sudo nvidia-ctk runtime configure --runtime=docker &>/dev/null"
 run_with_spinner "Restarting Docker Daemon" "sudo systemctl restart docker &>/dev/null"
+success_msg "Nvidia Container Toolkit installed"
 
-
-success_msg "NVIDIA driver + CUDA installation complete!"
+success_msg "Nvidia setup complete!"
