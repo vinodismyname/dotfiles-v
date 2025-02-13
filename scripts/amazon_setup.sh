@@ -26,7 +26,6 @@ else
   success_msg "Toolbox is already installed."
 fi
 
-export PATH=$PATH:~/.toolbox/bin
 run_with_spinner "Updating Toolbox..." "${HOME}/.toolbox/bin/toolbox update"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox Updated."
