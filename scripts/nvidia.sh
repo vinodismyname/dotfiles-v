@@ -17,7 +17,7 @@ DRIVER_URL="https://us.download.nvidia.com/tesla/${DRIVER_VERSION}/${DRIVER_FILE
 
 if [ ! -f "$DRIVER_FILE" ]; then
   run_with_spinner "Downloading NVIDIA driver..." "curl -LO $DRIVER_URL"
-  chmod +x "${HOME}/${DRIVER_FILE}"
+  chmod +x "./${DRIVER_FILE}"
 fi
 run_with_spinner "Installing NVIDIA driver..." "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${DRIVER_FILE} --ui=none"
 echo
@@ -26,7 +26,7 @@ info_msg "CUDA Setup"
 CUDA_INSTALLER="cuda_12.4.1_550.54.15_linux.run"
 CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/${CUDA_INSTALLER}"
 run_with_spinner "Downloading CUDA..." -- "curl -LO \"${CUDA_URL}\""
-chmod +x "$CUDA_INSTALLER"
+chmod +x "./${CUDA_INSTALLER}"
 run_with_spinner "installing CUDA" "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${CUDA_INSTALLER} --toolkit --silent"
 success_msg "CUDA Setup complete"
 
