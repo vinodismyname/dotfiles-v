@@ -26,8 +26,7 @@ else
   success_msg "Toolbox is already installed."
 fi
 
-info_msg "Updating Toolbox..." 
-toolbox update
+run_with_spinner "Updating Toolbox..." false "\"${HOME}/.toolbox/bin/toolbox\" update"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox Updated."
 else
@@ -35,8 +34,7 @@ else
 fi
 
 
-info_msg "Installing Brazil packages..." 
-toolbox install eda axe 
+run_with_spinner "Installing Brazil packages..." false "\"${HOME}/.toolbox/bin/toolbox\" install eda axe"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox packages installed."
 else
