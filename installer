@@ -62,21 +62,8 @@ handle_midway_auth() {
 if command -v mwinit &>/dev/null; then
     pp "!" "Refreshing Kinit credentials..."
     handle_kinit
-    AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
-    
-    if ! echo "$AUTH_RESPONSE" | grep -q '"authenticated":true'; then
-        pp "!" "Refreshing Midway credentials..."
-        handle_midway_auth
-    else
-        EXPIRES_AT=$(echo "$AUTH_RESPONSE" | grep -o '"expires_at":[0-9]*' | cut -d':' -f2)
-        CURRENT_TIME=$(date +%s)
-        TIME_REMAINING=$((EXPIRES_AT - CURRENT_TIME))
-        
-        if [ "$TIME_REMAINING" -lt 3600 ]; then
-            pp "!" "Credentials expiring soon, refreshing..."
-            handle_midway_auth
-        fi
-    fi
+    pp "!" "Refreshing Midway credentials..."
+    handle_midway_auth
 fi
 
 pp "→" "Preparing installation"
