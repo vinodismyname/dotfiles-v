@@ -10,7 +10,7 @@ echo
 
 info_msg "Updating Yum Package Manager..."
 if command -v yum &>/dev/null; then
-  run_with_spinner "yum update..." "sleep 1"
+  run_with_spinner "yum update..." false "sleep 1"
   if [ "$DRY_RUN" = false ]; then
     sudo yum update -y &>/dev/null
   else

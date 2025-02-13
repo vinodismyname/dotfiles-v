@@ -20,12 +20,12 @@ divider
 
 case "$PLATFORM" in
   darwin)
-    run_with_spinner "Dumping Brewfile (mac)..." -- \
+    run_with_spinner "Dumping Brewfile (mac)..." false \
      'brew bundle dump --force --file="$MAC_BREWFILE"'
     success_msg "✓ Updated $MAC_BREWFILE with currently installed packages."
     ;;
   linux)
-    run_with_spinner "Dumping Brewfile (linux)..." -- \
+    run_with_spinner "Dumping Brewfile (linux)..." false \
       'brew bundle dump --force --file="$LINUX_BREWFILE"'
     success_msg "✓ Updated $LINUX_BREWFILE with currently installed packages."
     ;;

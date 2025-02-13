@@ -15,12 +15,12 @@ info_msg "Installing Zellij"
 if [ "$os" == "Darwin" ]; then
   filename="zellij-${arch}-apple-darwin.tar.gz"
   url="https://github.com/zellij-org/zellij/releases/latest/download/${filename}"
-  run_with_spinner "Downloading Zellij binary for macOS..." "curl -LO \"$url\" "
+  run_with_spinner "Downloading Zellij binary for macOS..." false "curl -LO \"$url\" "
 else
   if [ "$os" == "Linux" ]; then
     filename="zellij-${arch}-unknown-linux-musl.tar.gz"
     url="https://github.com/zellij-org/zellij/releases/latest/download/${filename}"
-    run_with_spinner "Downloading Zellij binary for Linux..." "curl -LO \"$url\" "
+    run_with_spinner "Downloading Zellij binary for Linux..." false "curl -LO \"$url\" "
   else
     echo "Unsupported OS: $os"
   fi

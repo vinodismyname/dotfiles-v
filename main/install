@@ -157,7 +157,7 @@ divider
 # -----------------------------------------------------------------------------
 heading "Step 1: Updating Git Submodules"
 
-run_with_spinner "Cloning submodules..." \
+run_with_spinner "Cloning submodules..." false \
   "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
@@ -173,7 +173,7 @@ if [ "$INSTALL_BREW" = true ]; then
     subheading "Installing macOS Homebrew Packages"
     BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
     if [[ -f "$BREWFILE_PATH" ]]; then
-      run_with_spinner "brew bundle (mac)" \
+      run_with_spinner "brew bundle (mac)" false \
         "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
       success_msg "macOS brew bundle complete"
     else
@@ -183,7 +183,7 @@ if [ "$INSTALL_BREW" = true ]; then
     subheading "Installing Linux Homebrew Packages"
     BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
     if [[ -f "$BREWFILE_PATH" ]]; then
-      run_with_spinner "brew bundle (linux)" \
+      run_with_spinner "brew bundle (linux)" false \
         "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
       success_msg "Linux brew bundle complete"
     else
@@ -237,7 +237,7 @@ if [ "$INSTALL_AWS" = true ]; then
   # Install AWS CLI if mac
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then
-      run_with_spinner "Installing AWS cli" "brew install awscli"
+      run_with_spinner "Installing AWS cli" false "brew install awscli"
       success_msg "AWS cli installed (or already present)."
     else
       warn_msg "[DRY_RUN] brew install awscli"
@@ -263,7 +263,7 @@ if [ "$INSTALL_RUST" = true ]; then
   subheading "Rust Setup"
   if ! command -v "$HOME/.cargo/bin/rustc" &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      run_with_spinner "Installing Rust..." \
+      run_with_spinner "Installing Rust..." false \
         "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
       success_msg "Rust installation completed"
     else
@@ -307,7 +307,7 @@ if [ "$LINK_DOTFILES" = true ]; then
     # Dotbot doesn't natively have a "dry-run" mode, so we just echo the command
     warn_msg "[DRY_RUN] Would run dotbot: ${CMD[*]}"
   else
-    run_with_spinner "Running Dotbot..." "${CMD[*]}"
+    run_with_spinner "Running Dotbot..." false "${CMD[*]}"
     success_msg "Dotfiles linked."
   fi
 else

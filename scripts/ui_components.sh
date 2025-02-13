@@ -56,19 +56,40 @@ dim_msg() {
     gum style --foreground "$DIM" "    $1"
 }
 
-### Interactive Elements
+# ### Interactive Elements
+# run_with_spinner() {
+#     local message="$1"
+#     local use_sudo=${2:-false}
+#     local command="${@:3}"
+    
+
+#     local sudo_prefix=""
+#     [ "$use_sudo" = true ] && sudo_prefix="sudo"
+
+#     echo "$message"
+#     echo "$command"
+#     echo "$use_sudo"
+#     echo "$sudo_prefix"
+
+#     gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- $sudo_prefix bash -c "$command"
+# }
+
 run_with_spinner() {
     local message="$1"
     local use_sudo=${2:-false}
-    local command="${@:3}"
+    shift 2  # Remove first two arguments, leaving only the command
     
     local sudo_prefix=""
     [ "$use_sudo" = true ] && sudo_prefix="sudo"
     
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- $sudo_prefix bash -c "$command"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- $sudo_prefix bash -c "$*"
 }
+
 
 confirm_action() {
     local message="$1"
     gum confirm "$(gum style --foreground "$WARNING" "$message")" && return 0 || return 1
 }
+
+
+run_with_spinner "TESTING" false "sleep 10"
