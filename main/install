@@ -307,7 +307,7 @@ if [ "$LINK_DOTFILES" = true ]; then
     # Dotbot doesn't natively have a "dry-run" mode, so we just echo the command
     warn_msg "[DRY_RUN] Would run dotbot: ${CMD[*]}"
   else
-    run_with_spinner "Running Dotbot..." false "${CMD[*]}"
+    run_with_spinner "Running Dotbot..." false "sudo -u ${USER} ${CMD[*]}"
     success_msg "Dotfiles linked."
   fi
 else
