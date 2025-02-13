@@ -26,15 +26,16 @@ else
   success_msg "Toolbox is already installed."
 fi
 
-run_with_spinner "Updating Toolbox..." "toolbox update"
+export PATH=$PATH:~/.toolbox/bin
+run_with_spinner "Updating Toolbox..." "${HOME}/.toolbox/bin/toolbox update"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox Updated."
 else
   warn_msg "Could not update Toolbox. Proceeding anyways.."
 fi
 
-export PATH=$PATH:~/.toolbox/bin
-run_with_spinner "Installing Brazil packages..." "toolbox install eda axe"
+
+run_with_spinner "Installing Brazil packages..." "${HOME}/.toolbox/bin/toolbox install eda axe"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox packages installed."
 else
@@ -79,14 +80,14 @@ echo
 
 info_msg "Verifying and Setting up Workplace Folder"
 run_with_spinner "Setting up workplace directory..." \
- "sudo mkdir -p -m 755 '$WORKPLACE_DIR' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
+ "sudo mkdir -p -m 755 '${WORKPLACE_DIR}' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
 
 
 if [ ! -d "$HOME/workplace" ]; then
-  ln -s "$WORKPLACE_DIR" "$HOME/workplace"
-  success_msg "Created symlink: ~/workplace -> $WORKPLACE_DIR"
+  ln -s "${WORKPLACE_DIR}" "${HOME}/workplace"
+  success_msg "Created symlink: ~/workplace -> ${WORKPLACE_DIR}"
 else
-  warn_msg "Already Exists -> $WORKPLACE_DIR"
+  warn_msg "Already Exists -> ${WORKPLACE_DIR}"
 fi
 
 echo
