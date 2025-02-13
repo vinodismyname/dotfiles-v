@@ -6,29 +6,29 @@ layout {
     default_tab_template {
         pane size=2 borderless=true {
             plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
-                // Tokyo Night theme colors
-                color_fg "#c0caf5"
-                color_bg "#1d2021"
-                color_black "#414868"
-                color_red "#f7768e"
-                color_green "#9ece6a"
-                color_yellow "#e0af68"
-                color_blue "#7aa2f7"
-                color_magenta "#bb9af7"
-                color_cyan "#7dcfff"
-                color_white "#c0caf5"
-                color_orange "#ff9e64"
+                // Everforest theme colors
+                color_fg "#d3c6aa"
+                color_bg "#282828"
+                color_black "#1a1a1a"
+                color_red "#e67e80"
+                color_green "#a7c080"
+                color_yellow "#dbbc7f"
+                color_blue "#7fbbb3"
+                color_magenta "#d699b6"
+                color_cyan "#83c092"
+                color_white "#8D908D"
+                color_orange "#e69875"
                 
                 format_left   "{mode}#[bg=$bg] {tabs}"
                 format_center ""
-                format_right "#[bg=$bg,fg=$blue]#[bg=$blue,fg=$black,bold] #[bg=$black,fg=$fg,bold] {session} #[bg=$black,fg=$fg,bold]"
+                format_right "#[bg=$bg,fg=$blue]#[bg=$blue,fg=$black,bold] #[bg=$black,fg=$fg,bold] {session} #[bg=$black,fg=$fg,bold]"
                 format_space  ""
                 format_hide_on_overlength "true"
                 format_precedence "crl"
 
                 border_enabled  "false"
                 border_char    "─"
-                border_format  "#[fg=#414868]{char}"
+                border_format  "#[fg=#1a1a1a]{char}"
                 border_position "top"
                 hide_frame_for_single_pane "true"
 
@@ -47,16 +47,16 @@ layout {
                 mode_prompt       "#[bg=$blue,fg=$bg,bold] PROMPT#[bg=$bg,fg=$blue]█"
                 mode_tmux         "#[bg=$magenta,fg=$bg,bold] TMUX#[bg=$bg,fg=$magenta]█"
 
-                tab_normal              "#[bg=$bg,fg=#414868]█#[bg=#414868,fg=$fg,bold]{index} #[bg=$bg,fg=#414868,bold] {name}{floating_indicator}#[bg=$bg,fg=$bg,bold]█"
-                tab_normal_fullscreen   "#[bg=$bg,fg=#414868]█#[bg=#414868,fg=$fg,bold]{index} #[bg=$bg,fg=#414868,bold] {name}{fullscreen_indicator}#[bg=$bg,fg=$bg,bold]█"
-                tab_normal_sync         "#[bg=$bg,fg=#414868]█#[bg=#414868,fg=$fg,bold]{index} #[bg=$bg,fg=#414868,bold] {name}{sync_indicator}#[bg=$bg,fg=$bg,bold]█"
+                tab_normal              "#[bg=$bg,fg=#1a1a1a]█#[bg=#1a1a1a,fg=$fg,bold]{index} #[bg=$bg,fg=#1a1a1a,bold] {name}{floating_indicator}#[bg=$bg,fg=$bg,bold]█"
+                tab_normal_fullscreen   "#[bg=$bg,fg=#1a1a1a]█#[bg=#1a1a1a,fg=$fg,bold]{index} #[bg=$bg,fg=#1a1a1a,bold] {name}{fullscreen_indicator}#[bg=$bg,fg=$bg,bold]█"
+                tab_normal_sync         "#[bg=$bg,fg=#1a1a1a]█#[bg=#1a1a1a,fg=$fg,bold]{index} #[bg=$bg,fg=#1a1a1a,bold] {name}{sync_indicator}#[bg=$bg,fg=$bg,bold]█"
                 
                 tab_active              "#[bg=$bg,fg=$green]█#[bg=$green,fg=$bg,bold]{index} #[bg=$bg,fg=$green,bold] {name}{floating_indicator}#[bg=$bg,fg=$bg,bold]█"
                 tab_active_fullscreen   "#[bg=$bg,fg=$green]█#[bg=$green,fg=$fg,bold]{index} #[bg=$bg,fg=$green,bold] {name}{fullscreen_indicator}#[bg=$bg,fg=$bg,bold]█"
                 tab_active_sync         "#[bg=$bg,fg=$green]█#[bg=$green,fg=$fg,bold]{index} #[bg=$bg,fg=$green,bold] {name}{sync_indicator}#[bg=$bg,fg=$bg,bold]█"
 
                 tab_separator           "#[bg=$bg] "
-                tab_sync_indicator       " "
+                tab_sync_indicator       " "
                 tab_fullscreen_indicator " 󰊓"
                 tab_floating_indicator   " 󰹙"
 
