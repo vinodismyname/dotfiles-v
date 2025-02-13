@@ -19,7 +19,7 @@ if ! command -v toolbox &>/dev/null; then
     success_msg "Toolbox installed."
     export PATH=$PATH:~.toolbox/bin
   else
-    error_msg "× Could not install Toolbox. Exiting Amazon setup."
+    error_msg "Could not install Toolbox. Exiting Amazon setup."
     exit 1
   fi
 else

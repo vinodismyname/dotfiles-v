@@ -136,6 +136,14 @@ if confirm_action "Install Rust via rustup?"; then
   INSTALL_RUST=true
 fi
 
+# Ask user about Zellij
+INSTALL_ZELLIJ=false
+if $INSTALL_RUST; then
+  if confirm_action "Install Zellij Multiplexer?"; then
+    INSTALL_ZELLIJ=true
+  fi
+fi
+
 # Ask user about Dotbot linking
 LINK_DOTFILES=false
 if confirm_action "Link Dotfiles with Dotbot?"; then
@@ -263,6 +271,20 @@ if [ "$INSTALL_RUST" = true ]; then
     fi
   else
     dim_msg "Rust is already installed."
+  fi
+fi
+
+echo
+
+# -----------------------------------------------------------------------------
+# Zellij
+# -----------------------------------------------------------------------------
+if [ "$INSTALL_ZELLIJ" = true ]; then
+  subheading "Zellij Setup"
+  if [ "$DRY_RUN" = false ]; then
+    bash "$DOTFILES_DIR/scripts/install_zellij.sh"
+  else
+    warn_msg "[DRY_RUN] Would setup Zellij."
   fi
 fi
 
