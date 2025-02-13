@@ -65,7 +65,7 @@ run_with_spinner() {
     local sudo_prefix=""
     [ "$use_sudo" = true ] && sudo_prefix="sudo"
     
-    gum spin --spinner --show-output dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- $sudo_prefix bash -c "$command"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- $sudo_prefix bash -c "$command"
 }
 
 confirm_action() {
