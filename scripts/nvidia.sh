@@ -25,7 +25,7 @@ echo
 info_msg "CUDA Setup"
 CUDA_INSTALLER="cuda_12.4.1_550.54.15_linux.run"
 CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/${CUDA_INSTALLER}"
-run_with_spinner "Downloading CUDA..." -- "curl -LO \"${CUDA_URL}\""
+run_with_spinner "Downloading CUDA..." "curl -LO \"${CUDA_URL}\""
 chmod +x "./${CUDA_INSTALLER}"
 run_with_spinner "installing CUDA" "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${CUDA_INSTALLER} --toolkit --silent"
 success_msg "CUDA Setup complete"
