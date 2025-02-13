@@ -247,7 +247,7 @@ if [ "$INSTALL_AWS" = true ]; then
   # Attempt Amazon environment setup if mwinit is available
   if command -v mwinit &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
+      sudo -u "$USER" bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
       warn_msg "[DRY_RUN] amazon_setup.sh"
     fi
