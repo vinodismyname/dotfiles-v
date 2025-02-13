@@ -79,10 +79,10 @@ run_with_spinner() {
     local use_sudo=${2:-false}
     shift 2  # Remove first two arguments, leaving only the command
     
-    local sudo_prefix="sudo -u ${USER}"
+    local sudo_prefix="sudo -u $USER"
     [ "$use_sudo" = true ] && sudo_prefix="sudo"
     
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- "${sudo_prefix} bash -c $*"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- $sudo_prefix bash -c $*
 }
 
 
