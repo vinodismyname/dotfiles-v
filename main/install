@@ -158,7 +158,7 @@ divider
 heading "Step 1: Updating Git Submodules"
 
 run_with_spinner "Cloning submodules..." false \
-  sudo -u "$USER" bash -c 'git submodule sync --quiet --recursive && git submodule update --init --recursive'
+  "git submodule sync --quiet --recursive && git submodule update --init --recursive"
 
 success_msg "Git submodules updated"
 echo
@@ -247,7 +247,7 @@ if [ "$INSTALL_AWS" = true ]; then
   # Attempt Amazon environment setup if mwinit is available
   if command -v mwinit &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      sudo -u "$USER" bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
+      bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
       warn_msg "[DRY_RUN] amazon_setup.sh"
     fi
@@ -307,7 +307,7 @@ if [ "$LINK_DOTFILES" = true ]; then
     # Dotbot doesn't natively have a "dry-run" mode, so we just echo the command
     warn_msg "[DRY_RUN] Would run dotbot: ${CMD[*]}"
   else
-    run_with_spinner "Running Dotbot..." false "sudo -u ${USER} ${CMD[*]}"
+    run_with_spinner "Running Dotbot..." false "${CMD[*]}"
     success_msg "Dotfiles linked."
   fi
 else
