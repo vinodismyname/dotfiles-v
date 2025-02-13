@@ -82,7 +82,7 @@ run_with_spinner() {
     local sudo_prefix="sudo -u ${USER}"
     [ "$use_sudo" = true ] && sudo_prefix="sudo"
     
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- "\"${sudo_prefix}\"" bash -c \"$*\""
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- "${sudo_prefix} bash -c $*"
 }
 
 
