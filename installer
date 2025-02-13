@@ -12,6 +12,7 @@ pp() {
 
 
 pp "→" "checking internal git connection..."
+yes | ssh-keygen  &>/dev/null;
 if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
   pp "!" "git not figured.. adding git.amazon.com to known hosts"
   ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
@@ -27,6 +28,25 @@ fi
 
 pp "→" "Starting setup..."
 
+handle_kinit() {
+if command -v kinit &>/dev/null; then
+  if klist -s ; then
+    pp "✓" "Kerberos ticket is valid."
+  else
+    set +e
+    kinit -f
+    local status=$?
+    set -e
+    if [ $status -ne 0 ]; then
+    pp "×" "Kinit failed"
+    exit 1
+    fi
+
+  fi
+fi
+}
+
+
 handle_midway_auth() {
     set +e
     mwinit -o
@@ -40,10 +60,12 @@ handle_midway_auth() {
 }
 
 if command -v mwinit &>/dev/null; then
+    pp "!" "Refreshing Kinit credentials..."
+    handle_kinit
     AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
     
     if ! echo "$AUTH_RESPONSE" | grep -q '"authenticated":true'; then
-        pp "!" "Refreshing credentials..."
+        pp "!" "Refreshing Midway credentials..."
         handle_midway_auth
     else
         EXPIRES_AT=$(echo "$AUTH_RESPONSE" | grep -o '"expires_at":[0-9]*' | cut -d':' -f2)
