@@ -91,5 +91,3 @@ confirm_action() {
     gum confirm "$(gum style --foreground "$WARNING" "$message")" && return 0 || return 1
 }
 
-
-run_with_spinner "TESTING" false "sleep 10"
