@@ -79,7 +79,7 @@ echo
 
 info_msg "Verifying and Setting up Workplace Folder"
 run_with_spinner "Setting up workplace directory..." \
- "sudo mkdir -p -m 755 '${WORKPLACE_DIR}' && sudo chown -R '${USER}:amazon' '$WORKPLACE_DIR'"
+ "sudo mkdir -p -m 755 '${WORKPLACE_DIR}' && sudo chown -R '${USER}:amazon' '${WORKPLACE_DIR}'"
 
 
 if [ ! -d "$HOME/workplace" ]; then
