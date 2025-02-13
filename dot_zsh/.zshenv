@@ -65,7 +65,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   export BRAZIL_USE_PARALLEL_SYNCING=1
 
 
-  if [ "$HAS_NVDA" = true ]; then
+  if [ "$HAS_NVIDIA" = true ]; then
     # CUDA/torch Configuration
     if [[ -d "/usr/local/cuda-12.4" ]]; then
         export CUDA_HOME="/usr/local/cuda-12.4"
