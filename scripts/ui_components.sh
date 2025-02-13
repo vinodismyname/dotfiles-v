@@ -59,8 +59,13 @@ dim_msg() {
 ### Interactive Elements
 run_with_spinner() {
     local message="$1"
-    local command="${@:2}"
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- sudo bash -c "$command"
+    local use_sudo=${2:-false}
+    local command="${@:3}"
+    
+    local sudo_prefix=""
+    [ "$use_sudo" = true ] && sudo_prefix="sudo"
+    
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- $sudo_prefix bash -c "$command"
 }
 
 confirm_action() {
