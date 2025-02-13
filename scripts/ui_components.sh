@@ -60,7 +60,7 @@ dim_msg() {
 run_with_spinner() {
     local message="$1"
     local command="${@:2}"
-    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" -- bash -c "$command"
+    gum spin --spinner dot --title "$(gum style --foreground "$PRIMARY" "$message")" --show-output -- sudo bash -c "$command"
 }
 
 confirm_action() {

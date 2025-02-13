@@ -202,7 +202,7 @@ echo
 if [ "$INSTALL_NVIDIA" = true ]; then
   subheading "GPU Setup"
   if [ "$DRY_RUN" = false ]; then
-    bash "$DOTFILES_DIR/scripts/nvidia.sh"
+    sudo bash "$DOTFILES_DIR/scripts/nvidia.sh"
   else
     warn_msg "[DRY_RUN] Would run scripts/nvidia.sh"
   fi
