@@ -112,4 +112,4 @@ find "$DOTFILES_PATH" -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.zsh"
 
 # Run installer
 pp "→" "Running installer..."
-"$DOTFILES_PATH/main/install"
+sudo "$DOTFILES_PATH/main/install"
