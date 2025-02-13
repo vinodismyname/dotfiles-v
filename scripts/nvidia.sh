@@ -16,7 +16,7 @@ DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"
 DRIVER_URL="https://us.download.nvidia.com/tesla/${DRIVER_VERSION}/${DRIVER_FILE}"
 
 if [ ! -f "$DRIVER_FILE" ]; then
-  run_with_spinner "Downloading NVIDIA driver..." "curl -fSsl -O $DRIVER_URL"
+  run_with_spinner "Downloading NVIDIA driver..." "curl -LO $DRIVER_URL"
   chmod +x "${HOME}/${DRIVER_FILE}"
 fi
 run_with_spinner "Installing NVIDIA driver..." "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${DRIVER_FILE} --ui=none"
