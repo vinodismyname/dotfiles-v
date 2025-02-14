@@ -60,7 +60,7 @@ else
   warn_msg "Could not initialize builder-tools. Continuing anyway..."bash
 fi
 
-if command -v  "$HOME"/.toolbox/bin/axe &>/dev/null; then
+if command -v  "$HOME"/.toolbox/bin/brazil &>/dev/null; then
   run_with_spinner "Setting up Brazil completions..." false "  $HOME/.toolbox/bin/brazil setup completion || true"
   success_msg "brazil completions initialized."
 else
