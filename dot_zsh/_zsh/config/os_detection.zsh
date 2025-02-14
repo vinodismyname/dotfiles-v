@@ -16,9 +16,9 @@ else
   exit 1
 fi
 
-if [ "$IS_LINUX" = true ];
-  then 
-    if sudo /sbin/lspci 2>/dev/null | grep -i nvidia &>/dev/null;
+if [ "$IS_LINUX" = true ];then 
+    if sudo /sbin/lspci 2>/dev/null | grep -i nvidia &>/dev/null;then
+    HAS_NVIDIA=true
     fi
 fi
 
