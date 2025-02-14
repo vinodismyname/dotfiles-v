@@ -53,15 +53,15 @@ info_msg "Setting up Brazil / builder-tools..."
 run_with_spinner "Unlinking Brew pkg-config temporarily to avoid conflict with Builder-tool installs" false "brew unlink pkg-config"
 
 # Run axe init in the background or in a subshell
-run_with_spinner "Initializing builder-tools with AxE..." false "yes | axe init builder-tools &>/dev/null"
+run_with_spinner "Initializing builder-tools with AxE..." false "yes | $HOME/.toolbox/bin/axe init builder-tools &>/dev/null"
 if [ $? -eq 0 ]; then
   success_msg "builder-tools initialized."
 else
   warn_msg "Could not initialize builder-tools. Continuing anyway..."bash
 fi
 
-if command -v brazil &>/dev/null; then
-  run_with_spinner "Setting up Brazil completions..." false " brazil setup completion || true"
+if command -v  "$HOME"/.toolbox/bin/axe &>/dev/null; then
+  run_with_spinner "Setting up Brazil completions..." false "  $HOME/.toolbox/bin/brazil setup completion || true"
   success_msg "brazil completions initialized."
 else
   dim_msg "brazil command not found. Skipping Brazil completion setup."
