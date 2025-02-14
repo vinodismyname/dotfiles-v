@@ -17,16 +17,17 @@ if ! command -v toolbox &>/dev/null; then
   run_with_spinner "Toolbox not found. Attempting to install..." false "sudo yum install -y toolbox"
   if [ $? -eq 0 ]; then
     success_msg "Toolbox installed."
-    export PATH=$PATH:~.toolbox/bin
+    export PATH="$PATH:$(dirname $(which toolbox))/bin"
   else
     error_msg "Could not install Toolbox. Exiting Amazon setup."
     exit 1
   fi
 else
+  export PATH="$PATH:$(dirname $(which toolbox))/bin"
   success_msg "Toolbox is already installed."
 fi
 
-run_with_spinner "Updating Toolbox..." false "\"${HOME}/.toolbox/bin/toolbox\" update"
+run_with_spinner "Updating Toolbox..." false "toolbox update"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox Updated."
 else
@@ -34,7 +35,7 @@ else
 fi
 
 
-run_with_spinner "Installing Brazil packages..." false "\"${HOME}/.toolbox/bin/toolbox\" install eda axe"
+run_with_spinner "Installing Brazil packages..." false "toolbox install eda axe"
 if [ $? -eq 0 ]; then
   success_msg "Toolbox packages installed."
 else
@@ -52,15 +53,15 @@ info_msg "Setting up Brazil / builder-tools..."
 run_with_spinner "Unlinking Brew pkg-config temporarily to avoid conflict with Builder-tool installs" false "brew unlink pkg-config"
 
 # Run axe init in the background or in a subshell
-run_with_spinner "Initializing builder-tools with AxE..." false "yes | \"${HOME}/.toolbox/bin/axe\" init builder-tools &>/dev/null"
+run_with_spinner "Initializing builder-tools with AxE..." false "yes | axe init builder-tools &>/dev/null"
 if [ $? -eq 0 ]; then
   success_msg "builder-tools initialized."
 else
   warn_msg "Could not initialize builder-tools. Continuing anyway..."bash
 fi
 
-if command -v "${HOME}/.toolbox/bin/brazil" &>/dev/null; then
-  run_with_spinner "Setting up Brazil completions..." false " \"${HOME}/.toolbox/bin/brazil\" setup completion || true"
+if command -v brazil &>/dev/null; then
+  run_with_spinner "Setting up Brazil completions..." false " brazil setup completion || true"
   success_msg "brazil completions initialized."
 else
   dim_msg "brazil command not found. Skipping Brazil completion setup."
