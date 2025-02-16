@@ -16,6 +16,7 @@
     ~/.zshrc: dot_zsh/.zshrc
     ~/.p10k.zsh: dot_zsh/.p10k.zsh
     ~/.zshenv: dot_zsh/.zshenv
+    ~/.lessfilter: dot_zsh/.lessfilter
 
     ~/_zsh/:
       glob: true
