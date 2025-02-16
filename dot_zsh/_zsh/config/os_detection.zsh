@@ -1,3 +1,6 @@
+###############################################################################
+# This Scripts creates a few basic flags about the system zsh is running in 
+
 export OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
 export IS_MAC=false
 export IS_LINUX=false
@@ -13,11 +16,9 @@ else
   exit 1
 fi
 
-
-if [ "$IS_LINUX" = true ];
-  then 
-    if sudo lshw | grep -i nvidia &>/dev/null; 
-    then HAS_NVIDIA=true
+if [ "$IS_LINUX" = true ];then 
+    if sudo /sbin/lspci 2>/dev/null | grep -i nvidia &>/dev/null;then
+    HAS_NVIDIA=true
     fi
 fi
 

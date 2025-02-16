@@ -1,5 +1,6 @@
 tap "amzn/amzn", "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/HomebrewAmazon"
 tap "homebrew/bundle"
+cask "wezterm"
 brew "xz"
 brew "atuin"
 brew "automake"

@@ -10,7 +10,42 @@ pp() {
     printf "\033[1m%s\033[0m %s\n" "$symbol" "$message"
 }
 
+
+pp "→" "checking internal git connection..."
+echo y | ssh-keygen -t ecdsa -N '' -f ~/.ssh/id_ecdsa &>/dev/null
+if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
+  pp "!" "git not figured.. adding git.amazon.com to known hosts"
+  ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
+  if [ $? -eq 0 ]; then
+    pp "✓" "Successfully added git.amazon.com to known hosts."
+  else
+    pp "×" "Failed to add git.amazon.com to known hosts. Exiting."
+    exit 1
+  fi
+  pp "✓" "git.amazon.com is present in known hosts"
+fi
+
+
 pp "→" "Starting setup..."
+
+handle_kinit() {
+if command -v kinit &>/dev/null; then
+  if klist -s ; then
+    pp "✓" "Kerberos ticket is valid."
+  else
+    set +e
+    kinit -f
+    local status=$?
+    set -e
+    if [ $status -ne 0 ]; then
+    pp "×" "Kinit failed"
+    exit 1
+    fi
+
+  fi
+fi
+}
+
 
 handle_midway_auth() {
     set +e
@@ -25,21 +60,10 @@ handle_midway_auth() {
 }
 
 if command -v mwinit &>/dev/null; then
-    AUTH_RESPONSE=$(curl -s -b ~/.midway/cookie -c ~/.midway/cookie https://midway-auth.amazon.com/api/session-status)
-    
-    if ! echo "$AUTH_RESPONSE" | grep -q '"authenticated":true'; then
-        pp "!" "Refreshing credentials..."
-        handle_midway_auth
-    else
-        EXPIRES_AT=$(echo "$AUTH_RESPONSE" | grep -o '"expires_at":[0-9]*' | cut -d':' -f2)
-        CURRENT_TIME=$(date +%s)
-        TIME_REMAINING=$((EXPIRES_AT - CURRENT_TIME))
-        
-        if [ "$TIME_REMAINING" -lt 3600 ]; then
-            pp "!" "Credentials expiring soon, refreshing..."
-            handle_midway_auth
-        fi
-    fi
+    pp "!" "Refreshing Kinit credentials..."
+    handle_kinit
+    pp "!" "Refreshing Midway credentials..."
+    handle_midway_auth
 fi
 
 pp "→" "Preparing installation"
@@ -49,6 +73,32 @@ if ! command -v git &>/dev/null; then
     pp "×" "Git is required but not installed"
     exit 1
 fi
+
+if ! command -v brew &>/dev/null; then
+  pp "!" "Hombrew Not found, installing..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"  &>/dev/null;
+  # Add Homebrew to PATH for this session
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"  &>/dev/null
+  elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"  &>/dev/null
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"  &>/dev/null
+  fi
+  pp "✓" "Homebrew installed"
+fi
+
+if ! command -v gum &>/dev/null; then
+  pp "!" "Gum not found. Installing via Homebrew..."
+  eval "(brew install gum)" &>/dev/null
+  pp "✓" "gum is installed"
+fi
+
+if [ -d "$DOTFILES_PATH" ]; then
+  pp "!" "${DOTFILES_PATH} exists..Deleting"
+  sudo rm -rf "$DOTFILES_PATH"
+fi
+
 
 # Clone repository
 pp "→" "Cloning dotfiles..."
@@ -63,5 +113,3 @@ find "$DOTFILES_PATH" -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.zsh"
 # Run installer
 pp "→" "Running installer..."
 "$DOTFILES_PATH/main/install"
-
-pp "✓" "Setup complete"

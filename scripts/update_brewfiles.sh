@@ -14,19 +14,19 @@ MAC_BREWFILE="${BREWFILES_DIR}/mac.Brewfile"
 LINUX_BREWFILE="${BREWFILES_DIR}/linux.Brewfile"
 PLATFORM="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-heading "====> Updating Brewfiles from current system"
+subheading "Updating Brewfiles from current system"
 
 divider
 
 case "$PLATFORM" in
   darwin)
-    gum spin --spinner line --title "Dumping Brewfile (mac)..." -- \
-      brew bundle dump --force --file="$MAC_BREWFILE"
+    run_with_spinner "Dumping Brewfile (mac)..." false \
+     'brew bundle dump --force --file="$MAC_BREWFILE"'
     success_msg "✓ Updated $MAC_BREWFILE with currently installed packages."
     ;;
   linux)
-    gum spin --spinner line --title "Dumping Brewfile (linux)..." -- \
-      brew bundle dump --force --file="$LINUX_BREWFILE"
+    run_with_spinner "Dumping Brewfile (linux)..." false \
+      'brew bundle dump --force --file="$LINUX_BREWFILE"'
     success_msg "✓ Updated $LINUX_BREWFILE with currently installed packages."
     ;;
   *)

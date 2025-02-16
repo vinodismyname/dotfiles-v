@@ -2,10 +2,11 @@
 - defaults:
     link:
       create: true   # create parent directories as needed
+      mode: 0755
       relink: true   # if symlink already exists, remove it and link again
       force: true
     shell:
-      stdin: false
+      stdin: true
       stdout: true
       stderr: true
 
@@ -14,7 +15,8 @@
 - link:
     ~/.zshrc: dot_zsh/.zshrc
     ~/.p10k.zsh: dot_zsh/.p10k.zsh
-    ~/.zlogin: dot_zsh/.zlogin
+    ~/.zshenv: dot_zsh/.zshenv
+    ~/.lessfilter: dot_zsh/.lessfilter
 
     ~/_zsh/:
       glob: true

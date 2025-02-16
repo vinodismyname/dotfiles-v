@@ -1,4 +1,4 @@
-
+###############################################################################
 # FZF-TAB CONFIGURATION
 
 FZF_TAB_DEFAULT_OPTS="${FZF_DEF_COLOR_OPTS} ${FZF_DEF_LAYOUT_OPTS} ${FZF_DEF_HEADER}"
@@ -42,5 +42,5 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --color=always --git --l
 # switch group using `<` and `>` (instead of F1, F2)
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-source "$ZSH_CONFIG_FOLDER/plugins/fzf-tab/fzf-tab.plugin.zsh"
-source "$ZSH_CONFIG_FOLDER/plugins/fzf-tab-source/fzf-tab-source.plugin.zsh"
+source "${ZSH_CONFIG_FOLDER}/plugins/fzf-tab/fzf-tab.plugin.zsh"
+source "${ZSH_CONFIG_FOLDER}/plugins/fzf-tab-source/fzf-tab-source.plugin.zsh"

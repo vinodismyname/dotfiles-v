@@ -12,11 +12,10 @@ DRY_RUN="${1:-false}"
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
-heading "====> macOS-specific Setup"
+subheading "macOS-specific Setup"
 
-divider
 
-if gum confirm "Perform macOS software update? (Requires sudo)"; then
+if confirm_action "Perform macOS software update? (Requires sudo)"; then
   if [ "$DRY_RUN" = false ]; then
     sudo softwareupdate -i -a
   else

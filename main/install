@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 #
-# install - Main dotfiles installation script
+# install.sh - Main dotfiles installation script
 #
-
-# Base Setup
-#---------------------------
 set -euo pipefail
 
+# Source UI Components
 source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 
+# -----------------------------------------------------------------------------
 # Parse Arguments
-#---------------------------
+# -----------------------------------------------------------------------------
 DRY_RUN=false
 VERBOSE=false
 while [[ $# -gt 0 ]]; do
@@ -31,88 +30,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Ensure we're in the dotfiles directory
-export DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+export DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd -P )"
 cd "$DOTFILES_DIR"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Welcome
-# ─────────────────────────────────────────────────────────────────────────────
-
-gum style \
-  --border normal \
-  --margin "1" \
-  --padding "1" \
-  --bold \
-  --border-foreground "$PRIMARY" \
-  "Dotfiles-V Setup"
-
-gum style --bold "This script will:"
-echo "1) Install or update basic dependencies."
-echo "2) Prompt you for additional packages and configuration."
-echo "3) Invoke Dotbot to link your dotfiles."
-echo
-
-if ! gum confirm --affirmative "Yes" --negative "No" "Shall we proceed?"; then
-  warn_msg "Aborting install."
-  exit 0
-fi
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Check for Homebrew, install if needed
-# ─────────────────────────────────────────────────────────────────────────────
-
-heading "Step 1: Checking Homebrew"
-
-if ! command -v brew &>/dev/null; then
-  run_with_spinner "Installing Homebrew..." -- sleep 1
-  echo
-  gum style --foreground "$DIM" "Homebrew not found. Installing now..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  # Add Homebrew to PATH for this session
-  if [[ -f /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  elif [[ -f /usr/local/bin/brew ]]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-  fi
-  success_msg "Homebrew installed"
-else
-  success_msg "Homebrew already installed"
-fi
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Check for gum
-# ─────────────────────────────────────────────────────────────────────────────
-
-heading "Step 2: Ensuring Gum is Available"
-
-if ! command -v gum &>/dev/null; then
-  gum style --foreground "$DIM" "Gum not found. Installing via Homebrew..."
-  if [ "$DRY_RUN" = false ]; then
-    brew install gum
-  else
-    warn_msg "[DRY_RUN] brew install gum"
-  fi
-  success_msg "gum is installed"
-else
-  success_msg "gum is already installed"
-fi
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 # OS Detection
-# ─────────────────────────────────────────────────────────────────────────────
-
+# -----------------------------------------------------------------------------
 OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
 IS_MAC=false
 IS_LINUX=false
 IS_AMZN=false
-HAS_NVIDIA=false
 
 if command -v mwinit &>/dev/null; then
   IS_AMZN=true
@@ -131,113 +58,194 @@ case "$OS_NAME" in
     ;;
 esac
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Git submodules
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# Pre-check: Run Linux-Specific Script (for GPU detection, etc.)
+# -----------------------------------------------------------------------------
+if [ "$IS_LINUX" = true ]; then
+  echo
+  heading "Pre-check: Running Linux Setup Script for GPU Detection..."
 
-heading "Step 3: Updating Git Submodules"
-
-run_with_spinner "Cloning submodules..." -- \
-  bash -c "git submodule sync --quiet --recursive && git submodule update --init --recursive" &>/dev/null
-
-success_msg "Git submodules updated"
-
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Platform-Specific Homebrew Installation
-# ─────────────────────────────────────────────────────────────────────────────
-
-heading "Step 4: Installing Platform-Specific Packages"
-
-if [ "$IS_MAC" = true ]; then
-  primary_msg "Installing macOS Homebrew Packages"
-  BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
-  if [[ -f "$BREWFILE_PATH" ]]; then
-    grun_with_spinner "brew bundle (mac)" -- \
-      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
-    success_msg "macOS brew bundle complete"
+  if [ "$DRY_RUN" = false ]; then
+    bash "$DOTFILES_DIR/scripts/install_linux.sh" "$DRY_RUN"
   else
-    warn_msg "No mac.Brewfile found."
+    warn_msg "[DRY_RUN] Would run scripts/install_linux.sh"
   fi
-elif [ "$IS_LINUX" = true ]; then
-  primary_msg "Installing Linux Homebrew Packages"
-  BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
-  if [[ -f "$BREWFILE_PATH" ]]; then
-    run_with_spinner "brew bundle (linux)" -- \
-      bash -c "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
-    success_msg "Linux brew bundle complete"
-  else
-    warn_msg "No linux.Brewfile found."
-  fi
-  # Additional Linux-specific
-  source "$DOTFILES_DIR/scripts/install_linux.sh" "$DRY_RUN"
 fi
 
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
-# GPU / NVIDIA detection
-# ─────────────────────────────────────────────────────────────────────────────
-
-if [ "$IS_LINUX" = true ] && sudo lshw 2>/dev/null | grep -i nvidia &>/dev/null; then
+# Now check for NVIDIA (needs pciutils from install_linux.sh if Linux)
+HAS_NVIDIA=false
+if [ "$IS_LINUX" = true ] && command -v lspci &>/dev/null && sudo lspci 2>/dev/null | grep -i nvidia &>/dev/null; then
   HAS_NVIDIA=true
 fi
 
+divider 
+
+# -----------------------------------------------------------------------------
+# Welcome & Collect All User Choices Up Front
+# -----------------------------------------------------------------------------
+gum style \
+  --border normal \
+  --margin "1" \
+  --padding "1" \
+  --bold \
+  --border-foreground "$PRIMARY" \
+  "Hello $USER. Time to setup your environment!"
+
+gum style --bold "This script will:"
+echo "1) Install or update basic dependencies."
+echo "2) Prompt you for additional packages and configuration."
+echo "3) Invoke Dotbot to link your dotfiles."
+
+# Overall confirmation
+if ! confirm_action "Shall we proceed with the entire installation?"; then
+  warn_msg "Aborting install."
+  exit 0
+fi
+
+# Ask user about Homebrew installation
+INSTALL_BREW=false
+if confirm_action "Install Homebrew packages for your platform?"; then
+  INSTALL_BREW=true
+fi
+
+# Ask user about NVIDIA driver (only if GPU detected)
+INSTALL_NVIDIA=false
 if [ "$HAS_NVIDIA" = true ]; then
-  if gum confirm "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
-    if [ "$DRY_RUN" = false ]; then
-      bash "$DOTFILES_DIR/scripts/nvidia.sh"
-    else
-      warn_msg "[DRY_RUN] Would run scripts/nvidia.sh"
-    fi
+  if confirm_action "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
+    INSTALL_NVIDIA=true
   fi
-else
-  gum style --foreground "$DIM" "No NVIDIA GPU detected. Skipping NVIDIA setup."
+fi
+
+# Ask user about Docker group membership (Linux only)
+CONFIGURE_DOCKER=false
+if [ "$IS_LINUX" = true ]; then
+  if confirm_action "Configure Docker group membership?"; then
+    CONFIGURE_DOCKER=true
+  fi
+fi
+
+# Ask user about AWS CLI + Amazon environment
+INSTALL_AWS=false
+if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
+  INSTALL_AWS=true
+fi
+
+# Ask user about Rust
+INSTALL_RUST=false
+if confirm_action "Install Rust via rustup?"; then
+  INSTALL_RUST=true
+fi
+
+# Ask user about Zellij
+INSTALL_ZELLIJ=false
+if $INSTALL_RUST; then
+  if confirm_action "Install Zellij Multiplexer?"; then
+    INSTALL_ZELLIJ=true
+  fi
+fi
+
+# Ask user about Dotbot linking
+LINK_DOTFILES=false
+if confirm_action "Link Dotfiles with Dotbot?"; then
+  LINK_DOTFILES=true
 fi
 
 divider
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Docker Group
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# Step 1: Updating Git Submodules
+# -----------------------------------------------------------------------------
+heading "Step 1: Updating Git Submodules"
 
-if [ "$IS_LINUX" = true ] && gum confirm "Configure Docker group membership?"; then
+run_with_spinner "Cloning submodules..." false \
+  "git submodule sync --quiet --recursive && git submodule update --init --recursive"
+
+success_msg "Git submodules updated"
+echo
+
+# -----------------------------------------------------------------------------
+# Step 2: Installing Platform-Specific Packages (Homebrew)
+# -----------------------------------------------------------------------------
+heading "Step 2: Installing Platform-Specific Packages"
+
+if [ "$INSTALL_BREW" = true ]; then
+  if [ "$IS_MAC" = true ]; then
+    subheading "Installing macOS Homebrew Packages"
+    BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
+    if [[ -f "$BREWFILE_PATH" ]]; then
+      run_with_spinner "brew bundle (mac)" false \
+        "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
+      success_msg "macOS brew bundle complete"
+    else
+      warn_msg "No mac.Brewfile found."
+    fi
+  elif [ "$IS_LINUX" = true ]; then
+    subheading "Installing Linux Homebrew Packages"
+    BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
+    if [[ -f "$BREWFILE_PATH" ]]; then
+      run_with_spinner "brew bundle (linux)" false \
+        "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
+      success_msg "Linux brew bundle complete"
+    else
+      warn_msg "No linux.Brewfile found."
+    fi
+  fi
+else
+  dim_msg "Skipping Homebrew package installation."
+fi
+
+echo
+
+# -----------------------------------------------------------------------------
+# GPU / NVIDIA Setup
+# -----------------------------------------------------------------------------
+if [ "$INSTALL_NVIDIA" = true ]; then
+  subheading "GPU Setup"
+  if [ "$DRY_RUN" = false ]; then
+    sudo "$DOTFILES_DIR/scripts/nvidia.sh"
+  else
+    warn_msg "[DRY_RUN] Would run scripts/nvidia.sh"
+  fi
+else
+  dim_msg "Skipping NVIDIA setup."
+fi
+
+echo
+
+# -----------------------------------------------------------------------------
+# Docker Group (Linux)
+# -----------------------------------------------------------------------------
+if [ "$IS_LINUX" = true ] && [ "$CONFIGURE_DOCKER" = true ]; then
+  subheading "Docker Membership"
   if [ "$DRY_RUN" = false ]; then
     sudo groupadd docker 2>/dev/null || true
-    sudo usermod -aG docker "$USER"
+    sudo /usr/sbin/usermod -aG docker "$USER"
     success_msg "Added $USER to 'docker' group (re-login may be required)."
   else
     warn_msg "[DRY_RUN] groupadd docker && usermod -aG docker $USER"
   fi
 fi
 
-divider
+echo
 
-# ─────────────────────────────────────────────────────────────────────────────
-# AWS CLI + Amazon environment
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# AWS CLI + Amazon Environment
+# -----------------------------------------------------------------------------
+if [ "$INSTALL_AWS" = true ]; then
+  subheading "Amzn Work Env Setup"
 
-if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
+  # Install AWS CLI if mac
   if [ "$IS_MAC" = true ]; then
     if [ "$DRY_RUN" = false ]; then
-      brew install awscli
+      run_with_spinner "Installing AWS cli" false "brew install awscli"
+      success_msg "AWS cli installed (or already present)."
     else
       warn_msg "[DRY_RUN] brew install awscli"
     fi
-  elif [ "$IS_LINUX" = true ]; then
-    if command -v yum &>/dev/null; then
-      if [ "$DRY_RUN" = false ]; then
-        sudo yum install -y awscli
-      else
-        warn_msg "[DRY_RUN] sudo yum install -y awscli"
-      fi
-    fi
   fi
 
-  # Amazon environment
+  # Attempt Amazon environment setup if mwinit is available
   if command -v mwinit &>/dev/null; then
-    primary_msg "Amazon environment detected."
     if [ "$DRY_RUN" = false ]; then
       bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
     else
@@ -246,58 +254,72 @@ if gum confirm "Install AWS CLI (and attempt Amazon environment setup if applica
   fi
 fi
 
-divider
+echo
 
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 # Rust
-# ─────────────────────────────────────────────────────────────────────────────
-
-if gum confirm "Install Rust via rustup?"; then
-  if ! command -v rustc &>/dev/null; then
+# -----------------------------------------------------------------------------
+if [ "$INSTALL_RUST" = true ]; then
+  subheading "Rust Setup"
+  if ! command -v "$HOME/.cargo/bin/rustc" &>/dev/null; then
     if [ "$DRY_RUN" = false ]; then
-      run_with_spinner "Installing Rust..." -- \
-        bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+      run_with_spinner "Installing Rust..." false \
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
       success_msg "Rust installation completed"
     else
       warn_msg "[DRY_RUN] Would install Rust via rustup."
     fi
   else
-    gum style --foreground "$DIM" "Rust is already installed."
+    dim_msg "Rust is already installed."
   fi
 fi
 
-divider
+echo
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Dotbot
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# Zellij
+# -----------------------------------------------------------------------------
+if [ "$INSTALL_ZELLIJ" = true ]; then
+  subheading "Zellij Setup"
+  if [ "$DRY_RUN" = false ]; then
+    bash "$DOTFILES_DIR/scripts/install_zellij.sh"
+  else
+    warn_msg "[DRY_RUN] Would setup Zellij."
+  fi
+fi
 
-heading "Step 5: Linking Dotfiles with Dotbot"
+echo
 
+# -----------------------------------------------------------------------------
+# Step 3: Linking Dotfiles with Dotbot
+# -----------------------------------------------------------------------------
+heading "Step 3: Linking Dotfiles with Dotbot"
 DOTBOT_BIN="$DOTFILES_DIR/dotbot/bin/dotbot"
 if [ ! -x "$DOTBOT_BIN" ]; then
   DOTBOT_BIN="python3 $DOTFILES_DIR/dotbot/dotbot.py"
 fi
 
-CMD=("$DOTBOT_BIN" -d "$DOTFILES_DIR" -c "$DOTFILES_DIR/main/install.conf.yaml")
-[ "$VERBOSE" = true ] && CMD+=(--verbose)
+if [ "$LINK_DOTFILES" = true ]; then
+  CMD=("$DOTBOT_BIN" -d "$DOTFILES_DIR" -c "$DOTFILES_DIR/main/install.conf.yaml")
+  [ "$VERBOSE" = true ] && CMD+=(--verbose)
 
-if [ "$DRY_RUN" = true ]; then
-  CMD+=(--no-color --only link)
-  warn_msg "[DRY_RUN] Would run dotbot with: ${CMD[*]}"
+  if [ "$DRY_RUN" = true ]; then
+    # Dotbot doesn't natively have a "dry-run" mode, so we just echo the command
+    warn_msg "[DRY_RUN] Would run dotbot: ${CMD[*]}"
+  else
+    run_with_spinner "Running Dotbot..." false "${CMD[*]}"
+    success_msg "Dotfiles linked."
+  fi
 else
-  run_with_spinner "Running Dotbot..." -- bash -c "${CMD[*]}"
+  dim_msg "Skipping Dotfiles linking."
 fi
 
-divider
-
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 # Final Message
-# ─────────────────────────────────────────────────────────────────────────────
-
+# -----------------------------------------------------------------------------
 gum style \
   --border normal \
   --margin "1" \
   --padding "1" \
   --border-foreground "$SUCCESS" \
-  "✨ Done! Your dotfiles are linked. Enjoy your new setup!"
+  "✨ Done! Your environment setup is complete!"

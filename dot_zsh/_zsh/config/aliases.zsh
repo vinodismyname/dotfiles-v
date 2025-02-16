@@ -53,7 +53,7 @@ if [ "$IS_AMZN" = true ]; then
 
   if [ "$IS_LINUX" = true ]; then 
     alias aws='/apollo/env/AwsCli/bin/aws'
-    if [ "$HAS_NVDA" = true ]; then 
+    if [ "$HAS_NVIDIA" = true ]; then 
       alias nvitop="uvx nvitop --colorful"
     fi
   fi
