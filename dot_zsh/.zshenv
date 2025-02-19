@@ -95,6 +95,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   )
 
   path=(
+      /bin
       ${CUDA_HOME}/bin
       /usr/bin/gcc
       ~/bin
