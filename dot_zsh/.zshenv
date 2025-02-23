@@ -74,7 +74,7 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
     # CUDA/torch Configuration
     if [[ -d "/usr/local/cuda-12.4" ]]; then
         export CUDA_HOME="/usr/local/cuda-12.4"
-        export CUDA_VISIBLE_DEVICES=0,1,2,3
+        export CUDA_VISIBLE_DEVICES=0,1,2,3,5,6,7
         export LD_LIBRARY_PATH="${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
     fi
     export CC=/usr/bin/gcc10-cc
