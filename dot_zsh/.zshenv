@@ -72,8 +72,8 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
 
   if [ "$HAS_NVIDIA" = true ]; then
     # CUDA/torch Configuration
-    if [[ -d "/usr/local/cuda-12.4" ]]; then
-        export CUDA_HOME="/usr/local/cuda-12.4"
+    if [[ -d "/usr/local/cuda-12.8" ]]; then
+        export CUDA_HOME="/usr/local/cuda-12.8"
         export CUDA_VISIBLE_DEVICES=0,1,2,3,5,6,7
         export LD_LIBRARY_PATH="${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
     fi
@@ -86,8 +86,6 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
   typeset -U FPATH fpath PATH path MANPATH manpath MODULE_PATH module_path
 
   fpath=(
-      /apollo/env/envImprovement/var/zsh/functions/*(om[1])
-      /apollo/env/envImprovement/var/share/zsh/*{,/functions,site-functions}
       /usr/share/zsh/site-functions
       /home/linuxbrew/.linuxbrew/share/zsh/site-functions
       $EDA_AUTO
@@ -103,14 +101,11 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
       ${HOMEBREW_PREFIX}/{,s}bin
       ${GOPATH}/bin
       /usr/local/sessionmanagerplugin/bin
-      /apollo/env/envImprovement/bin
       /{,usr/}{,s}bin
-      /apollo/env/*/bin
       $path
   )
 
   manpath=(
-    /apollo/env/envImprovement/{,share/}man
     /home/linuxbrew/.linuxbrew/share/man
     /usr/kerberos/man
     $manpath
@@ -118,7 +113,6 @@ if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
 
   module_path=(
     /usr/lib64/zsh/${ZSH_VERSION}(N)
-    /apollo/env/envImprovement/var/lib/zsh/${ZSH_VERSION}(N)
     $module_path
   )
 

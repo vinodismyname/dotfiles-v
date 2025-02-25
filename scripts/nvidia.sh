@@ -11,7 +11,7 @@ source "$( dirname "${BASH_SOURCE[0]}" )/../scripts/ui_components.sh"
 subheading "Installing Nvidia driver and CUDA..."
 
 info_msg "Nvidia Driver Setup"
-DRIVER_VERSION="550.127.08"
+DRIVER_VERSION="570.86.15"
 DRIVER_FILE="NVIDIA-Linux-x86_64-${DRIVER_VERSION}.run"
 DRIVER_URL="https://us.download.nvidia.com/tesla/${DRIVER_VERSION}/${DRIVER_FILE}"
 
@@ -23,8 +23,8 @@ run_with_spinner "Installing NVIDIA driver..." true "(yes 1 ; yes) | CC=/usr/bin
 echo
 
 info_msg "CUDA Setup"
-CUDA_INSTALLER="cuda_12.4.1_550.54.15_linux.run"
-CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/${CUDA_INSTALLER}"
+CUDA_INSTALLER="cuda_12.8.0_570.86.10_linux.run"
+CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/${CUDA_INSTALLER}"
 run_with_spinner "Downloading CUDA..." true "curl -LO \"${CUDA_URL}\""
 chmod +x "./${CUDA_INSTALLER}"
 run_with_spinner "installing CUDA" true "(yes 1 ; yes) | CC=/usr/bin/gcc10-cc sh ./${CUDA_INSTALLER} --toolkit --silent"
