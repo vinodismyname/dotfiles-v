@@ -11,19 +11,19 @@ pp() {
 }
 
 
-pp "→" "checking internal git connection..."
-echo y | ssh-keygen -t ecdsa -N '' -f ~/.ssh/id_ecdsa &>/dev/null
-if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
-  pp "!" "git not figured.. adding git.amazon.com to known hosts"
-  ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
-  if [ $? -eq 0 ]; then
-    pp "✓" "Successfully added git.amazon.com to known hosts."
-  else
-    pp "×" "Failed to add git.amazon.com to known hosts. Exiting."
-    exit 1
-  fi
-  pp "✓" "git.amazon.com is present in known hosts"
-fi
+# pp "→" "checking internal git connection..."
+# echo y | ssh-keygen -t ecdsa -N '' -f ~/.ssh/id_ecdsa &>/dev/null
+# if [ ! -f ~/.ssh/known_hosts ] || ! grep -q "^git.amazon.com" ~/.ssh/known_hosts; then
+#   pp "!" "git not figured.. adding git.amazon.com to known hosts"
+#   ssh-keyscan git.amazon.com >> ~/.ssh/known_hosts
+#   if [ $? -eq 0 ]; then
+#     pp "✓" "Successfully added git.amazon.com to known hosts."
+#   else
+#     pp "×" "Failed to add git.amazon.com to known hosts. Exiting."
+#     exit 1
+#   fi
+#   pp "✓" "git.amazon.com is present in known hosts"
+# fi
 
 
 pp "→" "Starting setup..."
