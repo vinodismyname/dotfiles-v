@@ -1,17 +1,9 @@
 ###############################################################################
-#------------------------------------------------------------------------------
-# Load envImprovement zsh
-
-if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
-    local ZSH=/apollo/env/envImprovement/bin/zsh
-
-    if [[ ${SHELL} != ${ZSH} && -e ${ZSH} ]]; then
-    typeset -g SHELL=${ZSH}
-    exec ${ZSH} -${-} "${@}"
-    fi
-
-    unset ZSH
+## Ensure VSCode is in path if active
+if [[ -n "${VSCODE_GIT_ASKPASS_NODE}" ]]; then
+    export PATH=$(dirname ${VSCODE_GIT_ASKPASS_NODE})/bin/remote-cli:${PATH}
 fi
+
 #------------------------------------------------------------------------------
 # Helper Function
 
@@ -80,6 +72,7 @@ source_if_exists "$HOME/.p10k.zsh"
 # Carapace completions
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 source <(carapace _carapace)
+eval "$(~/.local/bin/mise activate zsh)"
 
 #------------------------------------------------------------------------------
 # Aliases and Custom zsh fuctions

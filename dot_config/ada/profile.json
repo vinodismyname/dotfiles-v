@@ -34,6 +34,14 @@
       "Role": "IibsAdminAccess-DO-NOT-DELETE",
       "Partition": "aws",
       "Profile": "carbon"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "430118859582",
+      "Region": "us-west-2",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "dns"
     }
   ]
 }

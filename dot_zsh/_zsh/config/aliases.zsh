@@ -36,6 +36,10 @@ function dkill() {
 alias brewup="brew update && brew upgrade && brew cleanup && brew doctor"
 alias reload-zsh="source ~/.zshrc"
 alias finch='sudo finch'
+alias mcp="mcp-proxy --sse-host 0.0.0.0 --sse-port 8089 --pass-environment amzn-mcp"
+alias getrooconfig='git clone --depth=1 https://github.com/GreatScottyMac/RooFlow.git temp-dir && mkdir -p .roo && cp -r temp-dir/config/.roo/* .roo/ && cp -r temp-dir/config/* . 2>/dev/null && rm -rf temp-dir && chmod +x insert-variables.sh && ./insert-variables.sh'
+
+
 
 if [ "$IS_AMZN" = true ]; then 
   alias bb='brazil-build'
@@ -52,7 +56,7 @@ if [ "$IS_AMZN" = true ]; then
 
 
   if [ "$IS_LINUX" = true ]; then 
-    alias aws='/apollo/env/AwsCli/bin/aws'
+    alias aws='/usr/local/bin/aws'
     if [ "$HAS_NVIDIA" = true ]; then 
       alias nvitop="uvx nvitop --colorful"
     fi
