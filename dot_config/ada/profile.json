@@ -34,6 +34,13 @@
       "Role": "IibsAdminAccess-DO-NOT-DELETE",
       "Partition": "aws",
       "Profile": "carbon"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "471112982248",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "aki"
     }
   ]
 }

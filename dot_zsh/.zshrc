@@ -1,3 +1,5 @@
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 ###############################################################################
 #------------------------------------------------------------------------------
 # Load envImprovement zsh
@@ -105,11 +107,24 @@ source_if_exists "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-high
 #Source Zellij Manager
 
 #whether Zellij should automatically launch when opening a new terminal
-export ZELLIJ_AUTO_START=true
+export ZELLIJ_AUTO_START=false
 
 #whether to attach to existing sessions instead of creating new ones
-export ZELLIJ_AUTO_ATTACH=true
+export ZELLIJ_AUTO_ATTACH=false
 source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
 
 ###############################################################################
+export QUIP_API_TOKEN="S1FZOU1BMjhrZ2c=|1774547703|09LoLIP7WsgJWE9UevDJfn8EMjK12SpIoyy6Sv1dx2M="
+export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+export AWS_CONTAINER_CREDENTIALS_FULL_URI=http://127.0.0.1:991
 
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# pnpm
+export PNPM_HOME="/Users/vinoddu/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

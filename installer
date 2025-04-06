@@ -102,7 +102,7 @@ fi
 
 # Clone repository
 pp "→" "Cloning dotfiles..."
-git clone --quiet --no-progress --depth 1 https://github.com/vinodismyname/dotfiles-v.git "$DOTFILES_PATH" &>/dev/null || {
+git clone --quiet --no-progress --depth 1 -b mac https://github.com/vinodismyname/dotfiles-v.git "$DOTFILES_PATH" &>/dev/null || {
     pp "×" "Failed to clone repository"
     exit 1
 }

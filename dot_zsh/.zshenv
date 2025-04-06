@@ -127,26 +127,29 @@ fi
 #------------------------------------------------------------------------------
 # Mac Specific Configuration
 if [ "$IS_MAC" = true ];
-then export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+then 
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
- if [ "$IS_AMZN" = true ]; then
-  typeset -U path  # Ensure unique entries
-  paths_to_prepend=(
-    "$HOME/.cargo/bin"
-    "$HOME/.toolbox/bin"
-    "$HOME/.local/bin"
-    "$HOME/bin"
-    "/opt/homebrew/bin"
-    "/home/linuxbrew/.linuxbrew/bin"
-    "$(ruby -e 'puts Gem.bindir' 2>/dev/null)"
-    "$GOPATH/bin"
-  )
 
-  for p in "${paths_to_prepend[@]}"; do
-    if [[ -d "$p" ]]; then
-      path=("$p" $path)
-    fi
-  done
-fi
+typeset -U path  # Ensure unique entries
+paths_to_prepend=(
+  "$HOME/.cargo/bin"
+  "$HOME/.toolbox/bin"
+  "$HOME/.local/bin"
+  "$HOME/bin"
+  "/usr/local/bin"
+  "/Users/vinoddu/bin"
+  "/Users/vinoddu/.local/bin"
+  "/opt/homebrew/bin"
+  "/home/linuxbrew/.linuxbrew/bin"
+  "$(ruby -e 'puts Gem.bindir' 2>/dev/null)"
+  "$GOPATH/bin"
+)
+
+for p in "${paths_to_prepend[@]}"; do
+  if [[ -d "$p" ]]; then
+    path=("$p" $path)
+  fi
+done
 fi
 ###############################################################################

@@ -19,6 +19,7 @@ alias gl="git pull --rebase"
 alias gd="git diff"
 alias gco='git checkout $(git branch | fzf)'
 alias glog='git log --oneline --decorate --graph --all'
+alias cat='bat'
 
 # Docker
 alias d="docker"

@@ -10,7 +10,8 @@ function cd-complete() {
 }
 zle -N cd-complete
 bindkey "^I" cd-complete
-
+bindkey '^[b' backward-word  # alt-left
+bindkey '^[f' forward-word   # alt-right
 
 zstyle ':completion:*' list-separator ''
 zstyle ':completion:*' matcher-list 'm:{[:upper:][:lower:]-_}={[:lower:][:upper:]_-}'
