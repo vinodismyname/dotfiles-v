@@ -15,6 +15,7 @@ fi
 # Load core shell settings 
 source "${ZSH_CONFIG_FOLDER}/config/setopt.zsh"  #opt settings
 source "${ZSH_CONFIG_FOLDER}/config/zstyles.zsh"  #zstyles
+source "${ZSH_CONFIG_FOLDER}/config/editor.zsh"  #editor configuration
 
 
 #------------------------------------------------------------------------------

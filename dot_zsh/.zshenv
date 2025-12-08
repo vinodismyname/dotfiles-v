@@ -21,11 +21,6 @@ export MANPAGER=less
 export LESS='-R'
 
 #------------------------------------------------------------------------------
-# Editor settings
-export EDITOR="nvim"
-export VISUAL="$EDITOR"
-
-#------------------------------------------------------------------------------
 # Bat Configuration
 export BAT_THEME="DarkNeon"
 export BAT_STYLE="numbers"
