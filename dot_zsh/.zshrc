@@ -1,14 +1,3 @@
-if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
-    local ZSH=/apollo/env/envImprovement/bin/zsh
-
-    if [[ ${SHELL} != ${ZSH} && -e ${ZSH} ]]; then
-    typeset -g SHELL=${ZSH}
-    exec ${ZSH} -${-} "${@}"
-    fi
-
-    unset ZSH
-fi
-#------------------------------------------------------------------------------
 # Helper Function
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT
@@ -132,7 +121,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$PATH:$HOME/.yarn/bin"
 
-source /Users/vinoddu/.brazil_completion/zsh_completion
+source_if_exists /Users/vinoddu/.brazil_completion/zsh_completion
 
 # Added by MultiQ installer
 export PATH="$HOME/.local/bin:$PATH"

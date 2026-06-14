@@ -33,49 +33,9 @@ done
 export DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd -P )"
 cd "$DOTFILES_DIR"
 
-# -----------------------------------------------------------------------------
-# OS Detection
-# -----------------------------------------------------------------------------
-OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
-IS_MAC=false
-IS_LINUX=false
-IS_AMZN=false
-
-if command -v mwinit &>/dev/null; then
-  IS_AMZN=true
-fi
-
-case "$OS_NAME" in
-  darwin)
-    IS_MAC=true
-    ;;
-  linux)
-    IS_LINUX=true
-    ;;
-  *)
-    error_msg "Unsupported OS: $OS_NAME"
-    exit 1
-    ;;
-esac
-
-# -----------------------------------------------------------------------------
-# Pre-check: Run Linux-Specific Script (for GPU detection, etc.)
-# -----------------------------------------------------------------------------
-if [ "$IS_LINUX" = true ]; then
-  echo
-  heading "Pre-check: Running Linux Setup Script for GPU Detection..."
-
-  if [ "$DRY_RUN" = false ]; then
-    bash "$DOTFILES_DIR/scripts/install_linux.sh" "$DRY_RUN"
-  else
-    warn_msg "[DRY_RUN] Would run scripts/install_linux.sh"
-  fi
-fi
-
-# Now check for NVIDIA (needs pciutils from install_linux.sh if Linux)
-HAS_NVIDIA=false
-if [ "$IS_LINUX" = true ] && command -v lspci &>/dev/null && sudo lspci 2>/dev/null | grep -i nvidia &>/dev/null; then
-  HAS_NVIDIA=true
+if [[ "$(uname -s)" != "Darwin" ]]; then
+  error_msg "This installer is macOS-only."
+  exit 1
 fi
 
 divider 
@@ -102,41 +62,21 @@ if ! confirm_action "Shall we proceed with the entire installation?"; then
   exit 0
 fi
 
-# Ask user about Homebrew installation
 INSTALL_BREW=false
-if confirm_action "Install Homebrew packages for your platform?"; then
+if confirm_action "Install Homebrew packages for macOS?"; then
   INSTALL_BREW=true
 fi
 
-# Ask user about NVIDIA driver (only if GPU detected)
-INSTALL_NVIDIA=false
-if [ "$HAS_NVIDIA" = true ]; then
-  if confirm_action "NVIDIA GPU detected. Install NVIDIA driver and CUDA?"; then
-    INSTALL_NVIDIA=true
-  fi
-fi
-
-# Ask user about Docker group membership (Linux only)
-CONFIGURE_DOCKER=false
-if [ "$IS_LINUX" = true ]; then
-  if confirm_action "Configure Docker group membership?"; then
-    CONFIGURE_DOCKER=true
-  fi
-fi
-
-# Ask user about AWS CLI + Amazon environment
 INSTALL_AWS=false
-if confirm_action "Install AWS CLI (and attempt Amazon environment setup if applicable)?"; then
+if confirm_action "Install AWS CLI?"; then
   INSTALL_AWS=true
 fi
 
-# Ask user about Rust
 INSTALL_RUST=false
 if confirm_action "Install Rust via rustup?"; then
   INSTALL_RUST=true
 fi
 
-# Ask user about Zellij
 INSTALL_ZELLIJ=false
 if $INSTALL_RUST; then
   if confirm_action "Install Zellij Multiplexer?"; then
@@ -144,7 +84,6 @@ if $INSTALL_RUST; then
   fi
 fi
 
-# Ask user about Dotbot linking
 LINK_DOTFILES=false
 if confirm_action "Link Dotfiles with Dotbot?"; then
   LINK_DOTFILES=true
@@ -164,31 +103,19 @@ success_msg "Git submodules updated"
 echo
 
 # -----------------------------------------------------------------------------
-# Step 2: Installing Platform-Specific Packages (Homebrew)
+# Step 2: Installing macOS Packages (Homebrew)
 # -----------------------------------------------------------------------------
-heading "Step 2: Installing Platform-Specific Packages"
+heading "Step 2: Installing macOS Packages"
 
 if [ "$INSTALL_BREW" = true ]; then
-  if [ "$IS_MAC" = true ]; then
-    subheading "Installing macOS Homebrew Packages"
-    BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
-    if [[ -f "$BREWFILE_PATH" ]]; then
-      run_with_spinner "brew bundle (mac)" false \
-        "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
-      success_msg "macOS brew bundle complete"
-    else
-      warn_msg "No mac.Brewfile found."
-    fi
-  elif [ "$IS_LINUX" = true ]; then
-    subheading "Installing Linux Homebrew Packages"
-    BREWFILE_PATH="$DOTFILES_DIR/dependencies/linux.Brewfile"
-    if [[ -f "$BREWFILE_PATH" ]]; then
-      run_with_spinner "brew bundle (linux)" false \
-        "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
-      success_msg "Linux brew bundle complete"
-    else
-      warn_msg "No linux.Brewfile found."
-    fi
+  subheading "Installing Homebrew Packages"
+  BREWFILE_PATH="$DOTFILES_DIR/dependencies/mac.Brewfile"
+  if [[ -f "$BREWFILE_PATH" ]]; then
+    run_with_spinner "brew bundle" false \
+      "[ \"$DRY_RUN\" = false ] && brew bundle --file=\"$BREWFILE_PATH\" || echo '[DRY_RUN] brew bundle --file=$BREWFILE_PATH'"
+    success_msg "Homebrew bundle complete"
+  else
+    warn_msg "No mac.Brewfile found."
   fi
 else
   dim_msg "Skipping Homebrew package installation."
@@ -197,60 +124,15 @@ fi
 echo
 
 # -----------------------------------------------------------------------------
-# GPU / NVIDIA Setup
-# -----------------------------------------------------------------------------
-if [ "$INSTALL_NVIDIA" = true ]; then
-  subheading "GPU Setup"
-  if [ "$DRY_RUN" = false ]; then
-    sudo "$DOTFILES_DIR/scripts/nvidia.sh"
-  else
-    warn_msg "[DRY_RUN] Would run scripts/nvidia.sh"
-  fi
-else
-  dim_msg "Skipping NVIDIA setup."
-fi
-
-echo
-
-# -----------------------------------------------------------------------------
-# Docker Group (Linux)
-# -----------------------------------------------------------------------------
-if [ "$IS_LINUX" = true ] && [ "$CONFIGURE_DOCKER" = true ]; then
-  subheading "Docker Membership"
-  if [ "$DRY_RUN" = false ]; then
-    sudo groupadd docker 2>/dev/null || true
-    sudo /usr/sbin/usermod -aG docker "$USER"
-    success_msg "Added $USER to 'docker' group (re-login may be required)."
-  else
-    warn_msg "[DRY_RUN] groupadd docker && usermod -aG docker $USER"
-  fi
-fi
-
-echo
-
-# -----------------------------------------------------------------------------
-# AWS CLI + Amazon Environment
+# AWS CLI
 # -----------------------------------------------------------------------------
 if [ "$INSTALL_AWS" = true ]; then
-  subheading "Amzn Work Env Setup"
-
-  # Install AWS CLI if mac
-  if [ "$IS_MAC" = true ]; then
-    if [ "$DRY_RUN" = false ]; then
-      run_with_spinner "Installing AWS cli" false "brew install awscli"
-      success_msg "AWS cli installed (or already present)."
-    else
-      warn_msg "[DRY_RUN] brew install awscli"
-    fi
-  fi
-
-  # Attempt Amazon environment setup if mwinit is available
-  if command -v mwinit &>/dev/null; then
-    if [ "$DRY_RUN" = false ]; then
-      bash "$DOTFILES_DIR/scripts/amazon_setup.sh"
-    else
-      warn_msg "[DRY_RUN] amazon_setup.sh"
-    fi
+  subheading "AWS CLI Setup"
+  if [ "$DRY_RUN" = false ]; then
+    run_with_spinner "Installing AWS CLI" false "brew install awscli"
+    success_msg "AWS CLI installed (or already present)."
+  else
+    warn_msg "[DRY_RUN] brew install awscli"
   fi
 fi
 

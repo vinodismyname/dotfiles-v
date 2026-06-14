@@ -52,24 +52,12 @@ if [ "$IS_AMZN" = true ]; then
   alias bball='brc --allPackages'
   alias bbb='brc --allPackages brazil-build'
   alias bbra='bbr apollo-pkg'
-
-
-  if [ "$IS_LINUX" = true ]; then 
-    alias aws='/apollo/env/AwsCli/bin/aws'
-    if [ "$HAS_NVIDIA" = true ]; then 
-      alias nvitop="uvx nvitop --colorful"
-    fi
-  fi
-
-
-  if [ "$IS_MAC" = true ]; then
-    alias code="open -a Visual\ Studio\ Code.app"
-    alias finder="open ."
-    alias hide-desktop='defaults write com.apple.finder CreateDesktop false; killall Finder'
-    alias show-desktop='defaults write com.apple.finder CreateDesktop true; killall Finder'
-    alias edit-zsh="code ~/.zshrc"
-    alias c="pbcopy"
-    alias v="pbpaste"
-  fi
-
 fi
+
+alias code="open -a Visual\ Studio\ Code.app"
+alias finder="open ."
+alias hide-desktop='defaults write com.apple.finder CreateDesktop false; killall Finder'
+alias show-desktop='defaults write com.apple.finder CreateDesktop true; killall Finder'
+alias edit-zsh="code ~/.zshrc"
+alias c="pbcopy"
+alias v="pbpaste"

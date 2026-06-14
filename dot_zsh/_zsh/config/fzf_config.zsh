@@ -152,7 +152,7 @@ setup_fzf() {
             ssh)
                 fzf --preview 'dig {} || host {}' "$@"
                 ;;
-            vim|nvim)
+            hx|vim)
                 fzf --preview "${PREVIEW_FILE_CMD} {}" "$@"
                 ;;
             man)
