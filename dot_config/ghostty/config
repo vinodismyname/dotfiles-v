@@ -6,23 +6,62 @@ shell-integration = zsh
 shell-integration-features = true
 bold-is-bright = true
 confirm-close-surface = false
-font-family = "Cascadia Code"
+font-family = "FiraCode Nerd Font"
 font-family = "Symbols Nerd Font Mono"
 font-size = 16
 cursor-style = "underline"
 font-style = "Retina"
-font-thicken = false
+font-thicken = true
 shell-integration-features = no-cursor
 cursor-click-to-move = true
-macos-titlebar-style = tabs 
+macos-titlebar-style = transparent
 macos-option-as-alt = true
-window-theme = system
 window-save-state = always
-quit-after-last-window-closed = true
-theme = duckbones
+theme = Argonaut
 clipboard-read = allow
 clipboard-write = allow
 copy-on-select = true
 clipboard-trim-trailing-spaces = true
-background-opacity = 0.9
 background-blur-radius = 20
+
+
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+
+
+# keybindings
+keybind = cmd+s>r=reload_config
+keybind = cmd+s>x=close_surface
+
+keybind = cmd+s>n=new_window
+
+# tabs
+keybind = cmd+s>c=new_tab
+keybind = cmd+s>shift+a=next_tab
+keybind = cmd+s>shift+d=previous_tab
+keybind = cmd+s>comma=move_tab:-1
+keybind = cmd+s>period=move_tab:1
+
+# quick tab switch
+keybind = cmd+s>1=goto_tab:1
+keybind = cmd+s>2=goto_tab:2
+keybind = cmd+s>3=goto_tab:3
+keybind = cmd+s>4=goto_tab:4
+keybind = cmd+s>5=goto_tab:5
+keybind = cmd+s>6=goto_tab:6
+keybind = cmd+s>7=goto_tab:7
+keybind = cmd+s>8=goto_tab:8
+keybind = cmd+s>9=goto_tab:9
+
+# split
+keybind = cmd+s>\=new_split:right
+keybind = cmd+s>-=new_split:down
+
+keybind = cmd+s>s=goto_split:bottom
+keybind = cmd+s>w=goto_split:top
+keybind = cmd+s>a=goto_split:left
+keybind = cmd+s>d=goto_split:right
+
+keybind = cmd+s>z=toggle_split_zoom
+
+keybind = cmd+s>e=equalize_splits
+keybind = shift+enter=text:\n

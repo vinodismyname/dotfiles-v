@@ -37,6 +37,10 @@ export GOPATH=$HOME/go
 export GOPROXY=direct
 
 #------------------------------------------------------------------------------
+#Credentials URI for Chat
+export AWS_CONTAINER_CREDENTIALS_FULL_URI=http://127.0.0.1:9911
+
+#------------------------------------------------------------------------------
 #Homebrew Configuration
 if [ "$IS_LINUX" = true ]; then 
   export HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
@@ -49,6 +53,12 @@ export HOMEBREW_REPOSITORY=${HOMEBREW_PREFIX}/Homebrew
 if [[ -f "$HOMEBREW_PREFIX/bin/brew" ]]; then
 eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 fi
+
+#------------------------------------------------------------------------------
+# SST Variables
+
+export SST_SSH_PRIVATE_KEY_FULL_PATH='/Users/vinoddu/vinod-sst'
+export SST_SSH_KEY_FULL_PATH='/Users/vinoddu/vinod-sst.pub'
 
 #------------------------------------------------------------------------------
 # Linux Specific Configuration
@@ -153,3 +163,5 @@ for p in "${paths_to_prepend[@]}"; do
 done
 fi
 ###############################################################################
+# uv
+export PATH="/Users/vinoddu/.local/bin:$PATH"

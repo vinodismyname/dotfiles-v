@@ -37,10 +37,164 @@
     },
     {
       "Provider": "conduit",
-      "Account": "471112982248",
+      "Account": "705083245394",
       "Role": "IibsAdminAccess-DO-NOT-DELETE",
       "Partition": "aws",
+      "Profile": "bim"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "381492190438",
+      "Role": "CustomRedshiftDatagripSSOAccessRole",
+      "Partition": "aws",
+      "Profile": "grid-sso"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "050284120730",
+      "Region": "us-west-2",
+      "Role": "BedrockConduitAccessRole",
+      "Partition": "aws",
+      "Profile": "bedrock"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "142141431395",
+      "Region": "us-west-2",
+      "Role": "bedrockManagedAccessRole",
+      "Partition": "aws",
+      "Profile": "BedrockAccessRole"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "471112704166",
+      "Region": "us-east-1",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "sstAdminAccess"
+    },
+    {
+      "Provider": "conduit",
+      "Account": "676206921281",
+      "Region": "us-east-1",
+      "Role": "IibsAdminAccess-DO-NOT-DELETE",
+      "Partition": "aws",
+      "Profile": "reosAccount"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "451712634237",
+      "Region": "us-west-2",
+      "Role": "aais-ae-bedrock-access-role",
+      "Partition": "aws",
+      "Profile": "aais-bedrock-access"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "769979514298",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "vinoddu-isengard"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "451712634237",
+      "Region": "us-west-2",
+      "Role": "aais-ae-bedrock-access-role",
+      "Partition": "aws",
       "Profile": "aki"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "963108901172",
+      "Region": "us-east-1",
+      "Role": "ReadOnly",
+      "Partition": "aws",
+      "Profile": "aae-landscape"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "476348170998",
+      "Region": "us-east-1",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "aais-compute-prod-east-1"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "963108901172",
+      "Region": "us-east-1",
+      "Role": "ReadOnly",
+      "Partition": "aws",
+      "Profile": "aais-data-prod-readonly-east-1"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "800480827430",
+      "Region": "us-west-2",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "yashPers"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "518125679796",
+      "Role": "ReadOnly",
+      "Partition": "aws",
+      "Profile": "sam-prod-readonly"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "451712634237",
+      "Region": "us-west-2",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "aais-bedrock-access-admin"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "331064632771",
+      "Region": "us-west-2",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "sim-beta"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "800480827430",
+      "Region": "us-west-2",
+      "Role": "AnalyticonWorkshopRole",
+      "Partition": "aws",
+      "Profile": "Analyticon2025PromptEngineeringMasteryWorkshop"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "843479649027",
+      "Region": "us-west-2",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "lattice-cdk-test"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "350358882806",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "lattice-route53"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "357094781484",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "lattice-prod"
+    },
+    {
+      "Provider": "isengard",
+      "Account": "779563210831",
+      "Role": "Admin",
+      "Partition": "aws",
+      "Profile": "lattice-alpha"
     }
   ]
 }

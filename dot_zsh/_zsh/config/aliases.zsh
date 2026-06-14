@@ -37,6 +37,8 @@ function dkill() {
 alias brewup="brew update && brew upgrade && brew cleanup && brew doctor"
 alias reload-zsh="source ~/.zshrc"
 alias finch='sudo finch'
+alias claude_bedrock='claude config set --global env '\''{"CLAUDE_CODE_USE_BEDROCK": "true", "ANTHROPIC_MODEL": "us.anthropic.claude-3-7-sonnet-20250219-v1:0"}'\'''
+alias roo-init="npx create-sparc aigi init"
 
 if [ "$IS_AMZN" = true ]; then 
   alias bb='brazil-build'

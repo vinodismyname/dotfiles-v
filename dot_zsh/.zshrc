@@ -1,9 +1,3 @@
-# Amazon Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-###############################################################################
-#------------------------------------------------------------------------------
-# Load envImprovement zsh
-
 if [ "$IS_LINUX" = true ] && [ "$IS_AMZN" = true ]; then
     local ZSH=/apollo/env/envImprovement/bin/zsh
 
@@ -114,13 +108,11 @@ export ZELLIJ_AUTO_ATTACH=false
 source "${ZSH_CONFIG_FOLDER}/config/zellij_manager.zsh"
 
 ###############################################################################
-export QUIP_API_TOKEN="S1FZOU1BMjhrZ2c=|1774547703|09LoLIP7WsgJWE9UevDJfn8EMjK12SpIoyy6Sv1dx2M="
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 export AWS_CONTAINER_CREDENTIALS_FULL_URI=http://127.0.0.1:991
-
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-
+zshrc_local="$HOME/_dotfiles/dot_zsh/.zshrc.local"
+[[ -r "$zshrc_local" ]] && source "$zshrc_local"
+unset zshrc_local
 # pnpm
 export PNPM_HOME="/Users/vinoddu/Library/pnpm"
 case ":$PATH:" in
@@ -128,3 +120,43 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# bun completions
+[ -s "/Users/vinoddu/.bun/_bun" ] && source "/Users/vinoddu/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$PATH:$HOME/.yarn/bin"
+
+source /Users/vinoddu/.brazil_completion/zsh_completion
+
+# Added by MultiQ installer
+export PATH="$HOME/.local/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/_dotfiles/dot_zsh/.p10k.zsh.
+[[ ! -f ~/_dotfiles/dot_zsh/.p10k.zsh ]] || source ~/_dotfiles/dot_zsh/.p10k.zsh
+
+# Added by smithy-mcp
+export PATH="$HOME/.config/smithy-mcp/mcp-servers:$PATH"
+
+# Added by AIM CLI
+export PATH="$HOME/.aim/mcp-servers:$PATH"
+
+# MeshClaw
+export PATH="/Volumes/workplace/meshclaw-ws/src/CibelesMeshClaw/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
